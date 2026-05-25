@@ -1,0 +1,4453 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Cuaderno Etnográfico</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Lora:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+<!-- pdf.js de Mozilla — extracción de PDFs en el navegador, sin enviar nada a ningún servidor -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+  if (window.pdfjsLib) {
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  }
+</script>
+<!-- mammoth.js — extracción de texto de archivos .docx en el navegador, sin enviar nada a ningún servidor -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+/* ── LIGHT THEME ── */
+[data-theme="light"]{
+  --bg:#F5EDD4;--bg2:#FEFAF2;--bg3:#F0E8D0;
+  --border:#C4B49A;--border2:#D4C9B0;
+  --text:#1C1C14;--text2:#5C5040;--text3:#8A7A68;--text4:#B0A28E;
+  --green-dark:#1E3A2F;--green-mid:#2D6A4F;--green-pale:#1A3328;
+  --amber:#B85C38;--purple:#7B5EA7;--blue:#2A5A8C;
+  --sidebar-bg:#1A3328;--sidebar-border:rgba(245,237,212,.08);
+  --sidebar-text:#E8DFC8;--sidebar-sub:rgba(245,237,212,.42);
+  --sidebar-section:rgba(245,237,212,.28);
+  --card-bg:#FEFAF2;--card-border:#D4C9B0;
+  --input-bg:#FEFAF2;--input-border:#C4B49A;
+  --header-bg:rgba(245,237,212,.96);--header-border:#C4B49A;
+  --toolbar-bg:rgba(245,237,212,.7);
+  --zone-bg:rgba(245,237,212,.5);
+  --annot-bg:#F5EDD4;
+  --shadow:rgba(0,0,0,.08);--shadow2:rgba(0,0,0,.15);
+  --hl-yellow:rgba(255,220,50,.45);--hl-yellow-h:rgba(255,220,50,.7);
+  --hl-green:rgba(45,106,79,.18);--hl-green-b:rgba(45,106,79,.5);
+  --code-bg:rgba(45,106,79,.1);--code-border:rgba(45,106,79,.25);
+  --err-bg:rgba(184,92,56,.07);--err-border:rgba(184,92,56,.25);
+  --badge-bg:rgba(184,92,56,.35);--badge-text:#E8C4A8;
+  --toast-bg:#1E3A2F;--toast-text:#F5EDD4;
+  --empty:#C4B49A;
+  --hist-bg:rgba(254,250,242,.5);
+  --scrollbar:#C4B49A;
+  --intro-overlay:rgba(245,237,212,.98);
+}
+
+/* ── DARK THEME ── */
+[data-theme="dark"]{
+  --bg:#0F1A14;--bg2:#152019;--bg3:#0A1209;
+  --border:#2A3D30;--border2:#1E2E25;
+  --text:#E8DFC8;--text2:#B8A98A;--text3:#7A8A78;--text4:#4A5A48;
+  --green-dark:#2D6A4F;--green-mid:#3D8A6A;--green-pale:#1E4030;
+  --amber:#D4784A;--purple:#9B7EC7;--blue:#4A7AAC;
+  --sidebar-bg:#0A1209;--sidebar-border:rgba(200,220,200,.06);
+  --sidebar-text:#C8DACC;--sidebar-sub:rgba(200,220,200,.35);
+  --sidebar-section:rgba(200,220,200,.22);
+  --card-bg:#152019;--card-border:#1E2E25;
+  --input-bg:#0F1A14;--input-border:#2A3D30;
+  --header-bg:rgba(10,18,9,.96);--header-border:#1E2E25;
+  --toolbar-bg:rgba(15,26,20,.9);
+  --zone-bg:rgba(10,18,9,.6);
+  --annot-bg:#0F1A14;
+  --shadow:rgba(0,0,0,.3);--shadow2:rgba(0,0,0,.5);
+  --hl-yellow:rgba(200,170,40,.3);--hl-yellow-h:rgba(200,170,40,.5);
+  --hl-green:rgba(45,106,79,.3);--hl-green-b:rgba(45,106,79,.7);
+  --code-bg:rgba(45,106,79,.15);--code-border:rgba(45,106,79,.35);
+  --err-bg:rgba(184,92,56,.12);--err-border:rgba(184,92,56,.35);
+  --badge-bg:rgba(212,120,74,.3);--badge-text:#E8C4A8;
+  --toast-bg:#2D6A4F;--toast-text:#F0EDE0;
+  --empty:#3A4A38;
+  --hist-bg:rgba(21,32,25,.6);
+  --scrollbar:#2A3D30;
+  --intro-overlay:rgba(10,18,9,.98);
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--scrollbar);border-radius:3px}
+
+body{
+  font-family:'Lora',serif;
+  background:var(--bg);
+  color:var(--text);
+  transition:background .3s,color .3s;
+}
+
+/* ════════════════════════════════════════
+   INTRO SCREEN
+════════════════════════════════════════ */
+#intro-screen{
+  position:fixed;inset:0;
+  background:var(--intro-overlay);
+  z-index:1000;
+  display:flex;align-items:flex-start;justify-content:center;
+  padding:1.5rem 1.5rem 2rem;
+  overflow-y:auto;
+  backdrop-filter:blur(4px);
+  transition:opacity .5s ease, visibility .5s ease;
+}
+#intro-screen.fade-out{
+  opacity:0;visibility:hidden;pointer-events:none;
+}
+.intro-box{
+  max-width:620px;width:100%;
+  text-align:center;
+  margin:auto;
+  padding:1rem 0;
+  animation:introIn .7s cubic-bezier(.16,1,.3,1) both;
+}
+@keyframes introIn{
+  from{opacity:0;transform:translateY(24px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.intro-sigil{
+  font-size:2.2rem;margin-bottom:.9rem;
+  opacity:.7;
+  animation:float 4s ease-in-out infinite;
+}
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-5px)}
+}
+.intro-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.6rem,5vw,2.5rem);
+  font-weight:300;
+  color:var(--text);
+  letter-spacing:.04em;
+  margin-bottom:.25rem;
+  line-height:1.15;
+}
+.intro-title em{color:var(--amber);font-style:italic;}
+.intro-subtitle{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--text3);margin-bottom:1.5rem;
+}
+.intro-divider{
+  width:36px;height:1px;background:var(--border);
+  margin:.7rem auto 1.1rem;
+}
+.intro-desc{
+  font-family:'Lora',serif;
+  font-size:clamp(.82rem,2.2vw,.92rem);
+  line-height:1.8;
+  color:var(--text2);
+  margin-bottom:1.4rem;
+  text-align:left;
+  max-width:500px;
+  margin-left:auto;margin-right:auto;
+}
+.intro-features{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:.5rem;
+  margin-bottom:1.5rem;
+  text-align:left;
+}
+@media(max-width:480px){.intro-features{grid-template-columns:1fr;gap:.4rem;}}
+.intro-feat{
+  display:flex;align-items:flex-start;gap:.5rem;
+  padding:.55rem .7rem;
+  background:var(--card-bg);
+  border:1px solid var(--border2);
+  border-radius:6px;
+}
+.intro-feat-sym{
+  font-size:.95rem;flex-shrink:0;margin-top:.05rem;
+}
+.intro-feat-text{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.58rem;letter-spacing:.05em;
+  color:var(--text2);line-height:1.55;
+}
+.intro-feat-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:.86rem;font-weight:600;
+  color:var(--text);
+  display:block;margin-bottom:.08rem;
+}
+.intro-aitag{
+  font-family:'IBM Plex Mono',monospace;font-size:.42rem;font-weight:400;
+  letter-spacing:.1em;text-transform:uppercase;
+  background:rgba(45,106,79,.18);color:#5A9A7A;
+  padding:.05rem .28rem;border-radius:2px;margin-left:.3rem;
+  vertical-align:middle;
+}
+.intro-enter-btn{
+  padding:.7rem 2.2rem;
+  background:var(--green-dark);
+  color:#F5EDD4;
+  border:none;cursor:pointer;
+  font-family:'Cormorant Garamond',serif;
+  font-size:1rem;letter-spacing:.1em;
+  border-radius:4px;
+  transition:background .2s,transform .15s;
+  display:inline-flex;align-items:center;gap:.45rem;
+}
+.intro-enter-btn:hover{background:var(--green-mid);transform:translateY(-1px);}
+.intro-note{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.5rem;letter-spacing:.08em;
+  color:var(--text4);
+  margin-top:.85rem;
+  text-transform:uppercase;
+}
+
+/* ════════════════════════════════════════
+   APP SHELL
+════════════════════════════════════════ */
+.app{
+  min-height:100vh;display:flex;flex-direction:column;
+  background:var(--bg);
+  background-image:
+    radial-gradient(ellipse at 15% 85%,rgba(180,120,60,.06) 0%,transparent 55%),
+    radial-gradient(ellipse at 85% 15%,rgba(45,106,79,.05) 0%,transparent 55%);
+  transition:background .3s;
+}
+
+/* ── HEADER ── */
+.hdr{
+  display:flex;align-items:center;gap:.8rem;
+  padding:.65rem 1.2rem;
+  border-bottom:1px solid var(--header-border);
+  background:var(--header-bg);
+  backdrop-filter:blur(12px);
+  position:sticky;top:0;z-index:50;
+  flex-wrap:wrap;gap:.5rem;
+  transition:background .3s,border-color .3s;
+}
+.hdr-left{display:flex;align-items:center;gap:.6rem;flex:1;min-width:0;}
+.hdr-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.25rem;font-weight:300;
+  color:var(--text);letter-spacing:.04em;white-space:nowrap;
+}
+.hdr-title em{color:var(--amber);font-style:italic;}
+.hdr-sub{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.55rem;color:var(--text3);
+  letter-spacing:.12em;text-transform:uppercase;
+  display:none;
+}
+@media(min-width:640px){.hdr-sub{display:block;}}
+.hdr-right{display:flex;align-items:center;gap:.6rem;flex-shrink:0;}
+.hdr-status{
+  font-family:'IBM Plex Mono',monospace;font-size:.52rem;
+  color:var(--text3);letter-spacing:.08em;
+  display:flex;align-items:center;gap:.3rem;
+}
+.status-dot{
+  width:6px;height:6px;border-radius:50%;
+  flex-shrink:0;transition:background .3s;
+}
+
+/* Theme toggle button */
+.theme-btn{
+  width:30px;height:30px;
+  background:transparent;
+  border:1px solid var(--border2);
+  border-radius:50%;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.85rem;
+  color:var(--text2);
+  transition:all .2s;
+  flex-shrink:0;
+}
+.theme-btn:hover{background:var(--bg3);border-color:var(--border);}
+
+/* ── LAYOUT ── */
+.layout{
+  display:grid;
+  grid-template-columns:185px 1fr;
+  flex:1;min-height:0;
+  height:calc(100vh - 46px);
+  transition:grid-template-columns .2s;
+}
+@media(max-width:900px){.layout{grid-template-columns:155px 1fr;}}
+@media(max-width:640px){
+  .layout{
+    grid-template-columns:1fr;
+    grid-template-rows:auto 1fr;
+    height:auto;
+    min-height:calc(100vh - 46px);
+  }
+}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  background:var(--sidebar-bg);
+  display:flex;flex-direction:column;
+  padding:.8rem 0;gap:.03rem;
+  overflow-y:auto;
+  transition:background .3s;
+}
+@media(max-width:640px){
+  .sidebar{
+    flex-direction:row;flex-wrap:nowrap;
+    padding:.35rem .2rem;
+    gap:0;
+    overflow-x:auto;overflow-y:hidden;
+    border-bottom:1px solid var(--sidebar-border);
+  }
+}
+.s-sec{
+  font-family:'IBM Plex Mono',monospace;font-size:.48rem;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--sidebar-section);
+  padding:.4rem .9rem .2rem;
+}
+.s-div{
+  border:none;
+  border-top:1px solid var(--sidebar-border);
+  margin:.25rem .8rem;
+}
+.s-btn{
+  display:flex;align-items:center;gap:.5rem;
+  padding:.6rem .85rem;
+  cursor:pointer;background:none;border:none;
+  border-left:2.5px solid transparent;
+  width:100%;text-align:left;
+  transition:background .12s,border-color .12s;
+  color:var(--sidebar-text);
+}
+.s-btn:hover{background:rgba(245,237,212,.06);}
+.s-btn.active{
+  background:rgba(245,237,212,.1);
+  border-left-color:var(--amber);
+}
+@media(max-width:640px){
+  .s-btn{
+    flex-direction:column;gap:.15rem;
+    padding:.4rem .5rem;
+    border-left:none;border-bottom:2.5px solid transparent;
+    min-width:52px;align-items:center;
+  }
+  .s-btn.active{border-left:none;border-bottom-color:var(--amber);}
+  .s-sec,.s-div,.s-footer,.s-sub{display:none;}
+}
+.s-sym{font-size:.9rem;width:18px;text-align:center;flex-shrink:0;}
+.s-texts{display:flex;flex-direction:column;gap:.03rem;}
+.s-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:.85rem;color:var(--sidebar-text);line-height:1.1;
+}
+.s-sub{
+  font-family:'IBM Plex Mono',monospace;font-size:.48rem;
+  color:var(--sidebar-sub);letter-spacing:.08em;text-transform:uppercase;
+}
+.s-badge{
+  margin-left:auto;
+  background:var(--badge-bg);color:var(--badge-text);
+  font-family:'IBM Plex Mono',monospace;font-size:.5rem;
+  padding:.08rem .32rem;border-radius:10px;flex-shrink:0;
+}
+@media(max-width:640px){.s-texts{display:none;}.s-badge{display:none;}}
+.s-footer{
+  margin-top:auto;
+  padding:.8rem .9rem .4rem;
+  border-top:1px solid var(--sidebar-border);
+  font-family:'IBM Plex Mono',monospace;font-size:.48rem;
+  color:var(--sidebar-section);
+  letter-spacing:.07em;line-height:1.7;
+}
+
+/* ── CONTENT ── */
+.content{
+  display:flex;flex-direction:column;
+  overflow:hidden;min-height:0;
+  background:var(--bg);
+  transition:background .3s;
+}
+
+/* ════════════════════════════════════════
+   TOOL VIEW
+════════════════════════════════════════ */
+.tool-view{
+  display:grid;
+  grid-template-rows:auto 1fr;
+  height:100%;overflow:hidden;
+}
+.input-zone{
+  padding:.9rem 1.3rem .7rem;
+  border-bottom:1px solid var(--border2);
+  background:var(--zone-bg);
+  transition:background .3s,border-color .3s;
+}
+.zone-head{
+  display:flex;align-items:center;
+  justify-content:space-between;
+  margin-bottom:.6rem;flex-wrap:wrap;gap:.4rem;
+}
+.zone-title{
+  display:flex;align-items:center;gap:.5rem;
+  font-family:'Cormorant Garamond',serif;
+  font-size:1rem;font-weight:300;color:var(--text);
+}
+.zone-title em{font-style:italic;color:var(--text3);font-size:.9em;}
+.zone-hint{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.52rem;color:var(--text4);letter-spacing:.07em;
+}
+.field-ta{
+  width:100%;min-height:90px;padding:.7rem .85rem;
+  font-family:'IBM Plex Mono',monospace;font-size:.76rem;
+  line-height:1.75;color:var(--text);
+  background:var(--input-bg);
+  border:1px solid var(--input-border);
+  border-radius:4px;resize:vertical;outline:none;
+  transition:border-color .15s,box-shadow .15s,background .3s,color .3s;
+}
+.field-ta::placeholder{color:var(--text4);}
+.field-ta:focus{
+  border-color:var(--green-mid);
+  box-shadow:0 0 0 3px rgba(45,106,79,.08);
+}
+.zone-actions{
+  display:flex;align-items:center;
+  justify-content:space-between;
+  margin-top:.45rem;flex-wrap:wrap;gap:.4rem;
+}
+.char-count{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.52rem;color:var(--text4);
+}
+.submit-btn{
+  padding:.42rem 1.1rem;
+  background:var(--green-dark);color:#F5EDD4;
+  border:none;cursor:pointer;
+  font-family:'Cormorant Garamond',serif;
+  font-size:.85rem;letter-spacing:.07em;
+  border-radius:3px;
+  display:flex;align-items:center;gap:.4rem;
+  transition:background .12s,transform .1s;
+}
+.submit-btn:hover:not(:disabled){
+  background:var(--green-mid);transform:translateY(-1px);
+}
+.submit-btn:disabled{opacity:.4;cursor:default;}
+
+.output-zone{
+  display:grid;
+  grid-template-columns:1fr 220px;
+  overflow-y:auto;
+  padding:1.1rem 1.3rem;
+  gap:1.1rem;align-content:start;
+}
+@media(max-width:900px){.output-zone{grid-template-columns:1fr;}}
+.out-head{
+  display:flex;align-items:center;
+  justify-content:space-between;margin-bottom:.55rem;
+}
+.out-label{
+  font-family:'IBM Plex Mono',monospace;font-size:.52rem;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--text3);
+}
+.copy-btn{
+  padding:.2rem .55rem;
+  border:1px solid var(--border2);background:transparent;
+  color:var(--text3);cursor:pointer;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.52rem;letter-spacing:.1em;
+  border-radius:3px;text-transform:uppercase;
+  transition:all .12s;
+}
+.copy-btn:hover{
+  background:var(--green-dark);color:#F5EDD4;
+  border-color:var(--green-dark);
+}
+.out-card{
+  background:var(--card-bg);
+  border:1px solid var(--card-border);
+  border-radius:5px;padding:1.1rem;min-height:130px;
+  transition:background .3s,border-color .3s;
+}
+.out-empty{display:flex;align-items:center;justify-content:center;}
+
+/* ── HISTORY PANEL ── */
+.hist-panel{display:flex;flex-direction:column;}
+.hist-label{
+  font-family:'IBM Plex Mono',monospace;font-size:.52rem;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--text3);margin-bottom:.45rem;
+  padding-bottom:.3rem;border-bottom:1px solid var(--border2);
+}
+.hist-item{
+  padding:.5rem .6rem;
+  border:1px solid var(--border2);
+  border-radius:4px;margin-bottom:.3rem;
+  cursor:pointer;transition:all .12s;
+  background:var(--hist-bg);
+}
+.hist-item:hover{border-color:var(--green-mid);background:var(--card-bg);}
+.hist-mode{
+  font-family:'IBM Plex Mono',monospace;font-size:.52rem;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--amber);
+}
+.hist-time{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.52rem;color:var(--text4);
+}
+.hist-preview{
+  font-family:'Lora',serif;font-size:.68rem;
+  color:var(--text2);font-style:italic;
+  display:-webkit-box;-webkit-line-clamp:2;
+  -webkit-box-orient:vertical;overflow:hidden;
+  line-height:1.4;margin-top:.18rem;
+}
+
+/* ── ALT VIEWS ── */
+.alt-view{
+  padding:1.2rem 1.4rem;
+  overflow-y:auto;flex:1;
+}
+.alt-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.35rem;font-weight:300;
+  color:var(--text);letter-spacing:.03em;margin-bottom:.18rem;
+}
+.alt-sub{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.55rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--text3);margin-bottom:1.2rem;
+}
+
+/* ── ANIMATIONS ── */
+.dots{display:flex;gap:4px;align-items:center;}
+.dot{
+  width:5px;height:5px;background:var(--amber);
+  border-radius:50%;
+  animation:dotP 1.1s ease-in-out infinite;
+}
+.dot:nth-child(2){animation-delay:.18s;}
+.dot:nth-child(3){animation-delay:.36s;}
+@keyframes dotP{
+  0%,80%,100%{transform:scale(.65);opacity:.35}
+  40%{transform:scale(1);opacity:1}
+}
+.cursor-blink{
+  display:inline-block;width:2px;height:.9em;
+  background:var(--amber);margin-left:1px;
+  vertical-align:text-bottom;
+  animation:blink .75s step-end infinite;
+}
+@keyframes blink{50%{opacity:0}}
+
+/* ── MARKDOWN RENDERED ── */
+.md-sec{
+  font-family:'IBM Plex Mono',monospace;font-weight:400;
+  font-size:.58rem;color:var(--green-mid);
+  letter-spacing:.14em;text-transform:uppercase;
+  border-bottom:1px solid var(--border2);
+  padding-bottom:.22em;margin-bottom:.4em;
+}
+.md-bul{
+  display:flex;gap:.55em;margin-bottom:.28em;padding-left:.25em;
+}
+.md-dot{color:var(--amber);margin-top:.15em;flex-shrink:0;font-size:.8em;}
+
+/* ── ERROR ── */
+.err{
+  padding:.55rem .8rem;
+  background:var(--err-bg);
+  border:1px solid var(--err-border);
+  border-radius:4px;color:var(--amber);
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.68rem;margin-bottom:.65rem;
+}
+
+/* ════════════════════════════════════════
+   DOC VIEW
+════════════════════════════════════════ */
+.doc-view{
+  display:grid;grid-template-columns:1fr 275px;
+  height:100%;overflow:hidden;
+}
+@media(max-width:900px){.doc-view{grid-template-columns:1fr;}}
+.doc-reader{
+  display:flex;flex-direction:column;
+  border-right:1px solid var(--border2);
+  overflow:hidden;
+  transition:border-color .3s;
+}
+.doc-toolbar{
+  display:flex;align-items:center;gap:.45rem;
+  padding:.6rem .9rem;
+  border-bottom:1px solid var(--border2);
+  background:var(--toolbar-bg);
+  flex-wrap:wrap;
+  transition:background .3s;
+}
+.doc-toolbar-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:.9rem;color:var(--text);
+  flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.dtb{
+  padding:.24rem .55rem;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.52rem;letter-spacing:.08em;
+  text-transform:uppercase;border-radius:3px;
+  cursor:pointer;transition:all .12s;
+  white-space:nowrap;border:1px solid;
+}
+.dtb.outline{
+  background:transparent;border-color:var(--border2);color:var(--text3);
+}
+.dtb.outline:hover{border-color:var(--green-mid);color:var(--green-mid);}
+.dtb.hl-off{
+  background:rgba(255,220,100,.15);
+  border-color:rgba(200,160,0,.25);color:var(--text2);
+}
+.dtb.hl-on{
+  background:rgba(255,220,100,.9);
+  border-color:rgba(200,160,0,.7);color:#5A3A00;
+}
+.dtb.code-off{
+  background:var(--code-bg);
+  border-color:var(--code-border);color:var(--green-mid);
+}
+.dtb.code-on{
+  background:rgba(45,106,79,.3);
+  border-color:var(--green-mid);color:var(--green-dark);
+}
+.dtb.primary{
+  background:var(--green-dark);
+  border-color:var(--green-dark);color:#F5EDD4;
+}
+.dtb.primary:hover{background:var(--green-mid);}
+.dtb.danger{
+  background:transparent;
+  border-color:var(--err-border);color:var(--amber);
+}
+.doc-body{
+  flex:1;overflow-y:auto;
+  padding:1.6rem 2rem;
+  font-family:'Lora',serif;font-size:.88rem;
+  line-height:1.9;color:var(--text);
+  user-select:text;
+  background:var(--card-bg);
+  transition:background .3s,color .3s;
+}
+.doc-body p{margin-bottom:.75em;}
+mark.hl-y{
+  background:var(--hl-yellow);
+  border-radius:2px;cursor:pointer;
+}
+mark.hl-y:hover{background:var(--hl-yellow-h);}
+mark.hl-g{
+  background:var(--hl-green);
+  border-radius:2px;
+  border-bottom:2px solid var(--hl-green-b);
+  cursor:pointer;
+}
+mark.hl-g:hover{background:rgba(45,106,79,.28);}
+.code-tag{
+  display:inline-block;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.55rem;letter-spacing:.06em;text-transform:uppercase;
+  background:var(--code-bg);color:var(--green-mid);
+  border:1px solid var(--code-border);
+  border-radius:10px;padding:0 5px;
+  margin-left:3px;vertical-align:middle;
+  cursor:pointer;line-height:1.6;
+}
+.code-tag:hover{background:rgba(45,106,79,.22);}
+
+/* ── ANNOT PANEL ── */
+.annot-panel{
+  display:flex;flex-direction:column;
+  overflow:hidden;background:var(--annot-bg);
+  transition:background .3s;
+}
+.annot-hdr{
+  padding:.65rem .85rem;
+  border-bottom:1px solid var(--border2);
+  background:var(--toolbar-bg);
+  transition:background .3s;
+}
+.annot-hdr-title{
+  font-family:'IBM Plex Mono',monospace;font-size:.52rem;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--text3);margin-bottom:.12rem;
+}
+.annot-tabs{display:flex;gap:.18rem;margin-top:.3rem;}
+.ann-tab{
+  font-family:'IBM Plex Mono',monospace;font-size:.5rem;
+  letter-spacing:.08em;text-transform:uppercase;
+  padding:.16rem .5rem;border-radius:2px;cursor:pointer;
+  border:1px solid transparent;transition:all .1s;color:var(--text3);
+}
+.ann-tab.active{background:var(--green-dark);color:#F5EDD4;border-color:var(--green-dark);}
+.ann-tab:not(.active):hover{border-color:var(--border);color:var(--text);}
+.annot-body{flex:1;overflow-y:auto;padding:.65rem .85rem;}
+.ann-item{
+  padding:.55rem .65rem;
+  background:var(--card-bg);
+  border:1px solid var(--card-border);
+  border-radius:4px;margin-bottom:.35rem;
+  transition:background .3s,border-color .3s;
+}
+.ann-text{
+  font-family:'Lora',serif;font-size:.76rem;
+  color:var(--text2);font-style:italic;line-height:1.5;
+  margin-bottom:.3rem;
+  display:-webkit-box;-webkit-line-clamp:3;
+  -webkit-box-orient:vertical;overflow:hidden;
+}
+.ann-meta{
+  display:flex;align-items:center;
+  justify-content:space-between;gap:.4rem;
+}
+.ann-code-lbl{
+  font-family:'IBM Plex Mono',monospace;font-size:.52rem;
+  letter-spacing:.07em;text-transform:uppercase;
+  color:var(--green-mid);background:var(--code-bg);
+  border:1px solid var(--code-border);
+  border-radius:10px;padding:.04rem .42rem;
+}
+.ann-del{
+  background:none;border:none;cursor:pointer;
+  font-size:.72rem;color:var(--text4);
+  padding:.08rem .28rem;border-radius:2px;
+  transition:color .1s;
+}
+.ann-del:hover{color:var(--amber);}
+.ann-empty{
+  text-align:center;padding:1.8rem 1rem;
+  color:var(--empty);
+}
+.annot-ai-sec{
+  border-top:1px solid var(--border2);
+  padding:.65rem .85rem;
+}
+.annot-ai-title{
+  font-family:'IBM Plex Mono',monospace;font-size:.5rem;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--text3);margin-bottom:.4rem;
+}
+.annot-ai-btn{
+  width:100%;padding:.4rem;
+  font-family:'Cormorant Garamond',serif;
+  font-size:.82rem;letter-spacing:.05em;
+  background:var(--green-dark);color:#F5EDD4;
+  border:none;border-radius:3px;cursor:pointer;
+  transition:background .12s;
+  display:flex;align-items:center;justify-content:center;gap:.4rem;
+}
+.annot-ai-btn:hover:not(:disabled){background:var(--green-mid);}
+.annot-ai-btn:disabled{opacity:.4;cursor:default;}
+
+/* ── NOTE EDITOR ── */
+.note-area{
+  width:100%;min-height:120px;
+  padding:.7rem .85rem;
+  font-family:'Lora',serif;font-size:.84rem;
+  line-height:1.8;color:var(--text);
+  background:var(--card-bg);
+  border:1px solid var(--input-border);
+  border-radius:4px;resize:vertical;outline:none;
+  transition:border-color .15s,background .3s,color .3s;
+}
+.note-area:focus{
+  border-color:var(--green-mid);
+  box-shadow:0 0 0 3px rgba(45,106,79,.07);
+}
+.note-item{
+  border:1px solid var(--border2);
+  border-radius:5px;padding:.85rem .95rem;
+  margin-bottom:.55rem;
+  background:var(--card-bg);
+  transition:background .3s,border-color .3s;
+}
+.note-hdr{
+  display:flex;align-items:center;
+  justify-content:space-between;gap:.5rem;
+  margin-bottom:.45rem;flex-wrap:wrap;
+}
+.note-title-input{
+  font-family:'Cormorant Garamond',serif;
+  font-size:.98rem;font-weight:400;
+  color:var(--text);background:transparent;
+  border:none;outline:none;
+  border-bottom:1px solid var(--border2);
+  padding-bottom:.18rem;flex:1;min-width:0;
+  transition:border-color .15s;
+}
+.note-title-input:focus{border-bottom-color:var(--green-mid);}
+.note-date{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.5rem;color:var(--text4);white-space:nowrap;
+}
+.note-codes-row{
+  display:flex;flex-wrap:wrap;gap:.28rem;
+  margin-bottom:.45rem;align-items:center;
+}
+.note-code-chip{
+  font-family:'IBM Plex Mono',monospace;font-size:.52rem;
+  letter-spacing:.06em;text-transform:uppercase;
+  background:var(--code-bg);color:var(--green-mid);
+  border:1px solid var(--code-border);
+  border-radius:10px;padding:.04rem .42rem;
+  cursor:pointer;display:inline-flex;align-items:center;gap:.18rem;
+}
+.note-code-chip:hover{background:rgba(45,106,79,.2);}
+.add-code-btn{
+  font-family:'IBM Plex Mono',monospace;font-size:.5rem;
+  letter-spacing:.06em;text-transform:uppercase;
+  background:transparent;border:1px dashed var(--border);
+  color:var(--text4);border-radius:10px;
+  padding:.04rem .42rem;cursor:pointer;transition:all .12s;
+}
+.add-code-btn:hover{border-color:var(--green-mid);color:var(--green-mid);}
+.note-body{
+  font-family:'Lora',serif;font-size:.84rem;
+  line-height:1.75;color:var(--text);
+  white-space:pre-wrap;cursor:text;min-height:40px;
+}
+.note-body-edit{
+  width:100%;font-family:'Lora',serif;
+  font-size:.84rem;line-height:1.75;color:var(--text);
+  background:transparent;border:none;outline:none;
+  resize:none;min-height:60px;
+}
+
+/* ── CODE POPUP ── */
+.code-popup{
+  position:fixed;z-index:300;
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  border-radius:6px;padding:.85rem;min-width:215px;
+  box-shadow:0 8px 30px var(--shadow2);
+  display:none;
+  transition:background .3s;
+}
+.code-popup.visible{display:block;}
+.code-popup-title{
+  font-family:'IBM Plex Mono',monospace;font-size:.55rem;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--text3);margin-bottom:.45rem;
+}
+.code-popup-input{
+  width:100%;padding:.38rem .55rem;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.76rem;color:var(--text);
+  background:var(--bg);
+  border:1px solid var(--input-border);
+  border-radius:3px;outline:none;margin-bottom:.38rem;
+  transition:border-color .15s,background .3s;
+}
+.code-popup-input:focus{border-color:var(--green-mid);}
+.code-suggs{display:flex;flex-wrap:wrap;gap:.22rem;margin-bottom:.45rem;}
+.code-sugg{
+  font-family:'IBM Plex Mono',monospace;font-size:.52rem;
+  text-transform:uppercase;
+  background:var(--code-bg);color:var(--green-mid);
+  border:1px solid var(--code-border);
+  border-radius:10px;padding:.04rem .38rem;cursor:pointer;
+}
+.code-sugg:hover{background:rgba(45,106,79,.2);}
+.code-popup-actions{display:flex;gap:.38rem;}
+.code-popup-btn{
+  flex:1;padding:.3rem;
+  font-family:'Cormorant Garamond',serif;
+  font-size:.8rem;border-radius:3px;cursor:pointer;transition:all .12s;
+}
+.code-popup-confirm{
+  background:var(--green-dark);color:#F5EDD4;
+  border:1px solid var(--green-dark);
+}
+.code-popup-confirm:hover{background:var(--green-mid);}
+.code-popup-cancel{
+  background:transparent;color:var(--text3);
+  border:1px solid var(--border2);
+}
+.code-popup-cancel:hover{border-color:var(--text3);color:var(--text);}
+
+/* ── UPLOAD ZONE ── */
+.upload-zone{
+  border:2px dashed var(--border);
+  border-radius:8px;padding:1.6rem;
+  text-align:center;cursor:pointer;
+  transition:all .18s;
+  background:rgba(245,237,212,.04);
+  margin-bottom:1.3rem;
+}
+[data-theme="dark"] .upload-zone{background:rgba(10,18,9,.3);}
+.upload-zone:hover,.upload-zone.drag{
+  border-color:var(--green-mid);
+  background:rgba(45,106,79,.04);
+}
+
+/* ── NUBE ── */
+.cat-chip{
+  display:inline-flex;align-items:center;gap:.3em;
+  border-radius:3px;cursor:default;padding:.2em .5em;
+}
+.cat-count{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.52rem;opacity:.65;
+}
+
+/* ── TOAST ── */
+.toast{
+  position:fixed;bottom:1.5rem;left:50%;
+  transform:translateX(-50%);
+  background:var(--toast-bg);color:var(--toast-text);
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.68rem;letter-spacing:.06em;
+  padding:.52rem 1.05rem;border-radius:20px;
+  z-index:500;pointer-events:none;
+  transition:opacity .25s,transform .25s;
+  white-space:nowrap;
+  box-shadow:0 4px 16px var(--shadow2);
+}
+.toast.hidden{opacity:0;transform:translateX(-50%) translateY(8px);}
+
+/* ── GENERIC INPUTS ── */
+.inp{
+  width:100%;padding:.52rem .72rem;
+  font-family:'IBM Plex Mono',monospace;font-size:.76rem;
+  color:var(--text);background:var(--card-bg);
+  border:1px solid var(--input-border);
+  border-radius:4px;outline:none;
+  transition:border-color .15s,background .3s,color .3s;
+}
+.inp:focus{border-color:var(--green-mid);}
+.gbtn{
+  padding:.38rem .85rem;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;
+  border-radius:3px;cursor:pointer;transition:all .12s;
+}
+.gbtn.green{
+  background:var(--green-dark);color:#F5EDD4;
+  border:1px solid var(--green-dark);
+}
+.gbtn.green:hover:not(:disabled){background:var(--green-mid);}
+.gbtn.outline{
+  background:transparent;border:1px solid var(--border2);color:var(--text3);
+}
+.gbtn.outline:hover{border-color:var(--green-mid);color:var(--green-mid);}
+.gbtn:disabled{opacity:.4;cursor:default;}
+
+/* ── PAGE TRANSITIONS ── */
+.content > *{animation:pageIn .25s ease both;}
+@keyframes pageIn{
+  from{opacity:0;transform:translateY(6px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ── RESPONSIVE TWEAKS ── */
+@media(max-width:480px){
+  .input-zone{padding:.7rem .9rem .6rem;}
+  .output-zone{padding:.8rem .9rem;gap:.8rem;}
+  .doc-body{padding:1rem 1.1rem;}
+  .alt-view{padding:.9rem 1rem;}
+  .hdr{padding:.5rem .9rem;}
+}
+
+/* ════════════════════════════════════════
+   V7 — HÍBRIDO: NUEVOS ESTILOS
+   (mantienen la estética del v6.3 — Lora/Cormorant + paleta verde)
+════════════════════════════════════════ */
+
+/* Sidebar: tag de IA y candado */
+.s-aitag{
+  font-family:'IBM Plex Mono',monospace;font-size:.45rem;
+  letter-spacing:.1em;text-transform:uppercase;
+  background:var(--code-bg);color:var(--green-mid);
+  padding:.05rem .25rem;border-radius:2px;margin-left:.3rem;
+  vertical-align:middle;
+}
+.s-lock{
+  font-family:'IBM Plex Mono',monospace;font-size:.7rem;
+  color:var(--amber);opacity:.65;margin-left:.3rem;
+}
+.s-btn.s-locked .s-sym{opacity:.55;}
+.s-btn.s-locked .s-name{opacity:.78;}
+
+/* Locked view (modo IA sin clave) */
+.locked-view{
+  max-width:560px;margin:2rem auto;padding:2rem 1.4rem;
+  text-align:center;
+  animation:pageIn .35s ease both;
+}
+.locked-sigil{
+  font-size:3.2rem;opacity:.55;margin-bottom:.8rem;
+  font-family:'Cormorant Garamond',serif;
+}
+.locked-title{
+  font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:300;
+  color:var(--text);margin-bottom:.4rem;
+}
+.locked-title em{color:var(--text3);font-style:italic;}
+.locked-desc{
+  font-family:'Lora',serif;font-size:.92rem;line-height:1.6;
+  color:var(--text2);margin-bottom:1.3rem;
+}
+.locked-features{
+  border-top:1px solid var(--border2);border-bottom:1px solid var(--border2);
+  padding:.9rem 0;margin:1rem 0 1.5rem;
+}
+.locked-feat{
+  font-family:'Lora',serif;font-size:.83rem;color:var(--text2);
+  margin:.25rem 0;text-align:left;display:flex;gap:.5rem;justify-content:center;
+}
+.locked-feat-bullet{color:var(--green-mid);font-weight:600;}
+.locked-actions{
+  display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.2rem;
+}
+.locked-alt{
+  font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.85rem;
+  color:var(--text3);
+}
+
+/* Error detail box */
+.err-detail{
+  background:var(--err-bg);border:1px solid var(--err-border);
+  border-radius:4px;padding:.7rem .9rem;margin-bottom:.7rem;
+}
+.err-detail-title{
+  font-family:'IBM Plex Mono',monospace;font-size:.7rem;
+  color:var(--amber);font-weight:400;margin-bottom:.35rem;
+  letter-spacing:.04em;
+}
+.err-detail-body{
+  font-family:'Lora',serif;font-size:.78rem;line-height:1.5;color:var(--text2);
+}
+.err-detail-btn{
+  margin-top:.6rem;background:transparent;border:1px solid var(--amber);
+  color:var(--amber);padding:.3rem .7rem;border-radius:3px;
+  font-family:'IBM Plex Mono',monospace;font-size:.6rem;
+  letter-spacing:.05em;text-transform:uppercase;cursor:pointer;
+  transition:all .2s;
+}
+.err-detail-btn:hover{background:var(--amber);color:var(--bg);}
+
+/* CITAR — Formulario estructurado */
+.citar-tabs{
+  display:flex;gap:.4rem;margin-bottom:.85rem;padding-bottom:.6rem;
+  border-bottom:1px solid var(--border2);
+}
+.citar-tab{
+  background:transparent;border:1px solid var(--border2);
+  padding:.4rem .8rem;border-radius:3px;cursor:pointer;
+  font-family:'Lora',serif;font-size:.78rem;color:var(--text2);
+  transition:all .2s;display:flex;align-items:center;gap:.4rem;
+}
+.citar-tab:hover{border-color:var(--green-mid);color:var(--text);}
+.citar-tab.active{
+  background:var(--green-dark);color:#F5EDD4;border-color:var(--green-dark);
+}
+.citar-tab.disabled{opacity:.45;cursor:not-allowed;}
+.citar-tab.disabled:hover{border-color:var(--border2);color:var(--text2);}
+.ct-badge{
+  font-family:'IBM Plex Mono',monospace;font-size:.5rem;
+  letter-spacing:.08em;text-transform:uppercase;
+  padding:.08rem .3rem;border-radius:2px;
+  background:rgba(45,106,79,.15);color:var(--green-mid);
+}
+.citar-tab.active .ct-badge{background:rgba(255,255,255,.15);color:#F5EDD4;}
+.ct-badge.off{background:rgba(184,92,56,.15);color:var(--amber);}
+
+.citar-form, .citar-paste{display:flex;flex-direction:column;gap:.55rem;}
+.cf-row{display:flex;flex-direction:column;gap:.22rem;}
+.cf-label{
+  font-family:'IBM Plex Mono',monospace;font-size:.58rem;
+  letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text3);
+}
+.cf-input{
+  font-family:'Lora',serif;font-size:.82rem;
+  background:var(--input-bg);color:var(--text);
+  border:1px solid var(--input-border);border-radius:3px;
+  padding:.4rem .55rem;outline:none;
+  transition:border-color .2s;
+}
+.cf-input:focus{border-color:var(--green-mid);}
+.cf-ta{font-family:'Lora',serif;resize:vertical;}
+.cf-actions{
+  display:flex;gap:.5rem;margin-top:.4rem;flex-wrap:wrap;
+}
+
+.citar-out{margin-top:1rem;}
+
+/* CONFIG VIEW */
+.cfg-view{max-width:720px;}
+.cfg-section{
+  border:1px solid var(--border2);border-radius:5px;
+  padding:1rem 1.1rem;margin-bottom:1rem;background:var(--card-bg);
+}
+.cfg-section.danger{
+  border-color:rgba(184,92,56,.4);background:var(--err-bg);
+}
+.cfg-sec-title{
+  font-family:'Cormorant Garamond',serif;font-size:1.05rem;
+  color:var(--text);margin-bottom:.4rem;font-weight:400;
+}
+.cfg-sec-desc{
+  font-family:'Lora',serif;font-size:.78rem;line-height:1.55;
+  color:var(--text2);margin-bottom:.75rem;
+}
+.cfg-key-status{
+  font-family:'IBM Plex Mono',monospace;font-size:.65rem;
+  letter-spacing:.05em;padding:.4rem .65rem;border-radius:3px;
+  margin-bottom:.7rem;
+}
+.cfg-key-status.ok{
+  background:rgba(45,106,79,.15);color:var(--green-mid);
+  border:1px solid rgba(45,106,79,.3);
+}
+.cfg-key-status.off{
+  background:rgba(184,92,56,.1);color:var(--amber);
+  border:1px solid rgba(184,92,56,.3);
+}
+.cfg-key-status code{
+  font-family:'IBM Plex Mono',monospace;font-size:.65rem;
+  background:rgba(0,0,0,.05);padding:.05rem .3rem;border-radius:2px;
+}
+.cfg-actions{display:flex;gap:.4rem;flex-wrap:wrap;margin:.5rem 0;}
+.cfg-test-loading{
+  font-family:'IBM Plex Mono',monospace;font-size:.65rem;
+  color:var(--text3);padding:.5rem 0;font-style:italic;
+}
+.cfg-test-ok{
+  background:rgba(45,106,79,.1);border:1px solid rgba(45,106,79,.3);
+  color:var(--green-mid);padding:.5rem .7rem;border-radius:3px;
+  font-family:'Lora',serif;font-size:.78rem;margin-top:.5rem;
+}
+.cfg-test-err{
+  background:var(--err-bg);border:1px solid var(--err-border);
+  padding:.6rem .8rem;border-radius:3px;margin-top:.5rem;
+}
+.cfg-test-err-title{
+  font-family:'IBM Plex Mono',monospace;font-size:.7rem;
+  color:var(--amber);margin-bottom:.3rem;
+}
+.cfg-test-err-detail{
+  font-family:'Lora',serif;font-size:.76rem;line-height:1.5;color:var(--text2);
+}
+.cfg-models{display:flex;flex-direction:column;gap:.4rem;margin-top:.5rem;}
+.cfg-radio{
+  display:flex;align-items:flex-start;gap:.6rem;
+  border:1px solid var(--border2);padding:.55rem .75rem;border-radius:3px;
+  cursor:pointer;transition:border-color .2s,background .2s;
+}
+.cfg-radio:hover{border-color:var(--green-mid);}
+.cfg-radio input[type="radio"]{margin-top:.18rem;accent-color:var(--green-mid);}
+.cfg-radio-label{
+  font-family:'Lora',serif;font-size:.85rem;color:var(--text);font-weight:500;
+}
+.cfg-radio-desc{
+  font-family:'IBM Plex Mono',monospace;font-size:.6rem;
+  letter-spacing:.04em;color:var(--text3);margin-top:.15rem;
+}
+.cfg-data-stats{
+  display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.5rem;
+}
+.cfg-stat{
+  font-family:'IBM Plex Mono',monospace;font-size:.6rem;
+  background:var(--bg3);padding:.25rem .5rem;border-radius:2px;
+  color:var(--text2);
+}
+.gbtn.danger{
+  background:var(--amber);color:#FEFAF2;border:1px solid var(--amber);
+}
+.gbtn.danger:hover{opacity:.85;}
+
+/* GUIDE MODAL */
+.guide-modal{
+  position:fixed;inset:0;z-index:2000;
+  display:none;align-items:flex-start;justify-content:center;
+  padding:2rem 1rem;overflow-y:auto;
+}
+.guide-backdrop{
+  position:fixed;inset:0;background:rgba(0,0,0,.45);
+  backdrop-filter:blur(3px);cursor:pointer;
+}
+.guide-box{
+  position:relative;background:var(--bg2);
+  border:1px solid var(--border);border-radius:6px;
+  max-width:640px;width:100%;
+  box-shadow:0 6px 30px var(--shadow2);
+  margin:0 auto;
+  animation:pageIn .3s ease both;
+  z-index:1;
+}
+.guide-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1rem 1.2rem .8rem;
+  border-bottom:1px solid var(--border2);
+}
+.guide-title{
+  font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:400;
+  color:var(--text);
+}
+.guide-close{
+  background:transparent;border:none;cursor:pointer;
+  font-size:1.2rem;color:var(--text3);padding:.3rem;
+  border-radius:3px;line-height:1;
+}
+.guide-close:hover{background:var(--bg3);color:var(--text);}
+.guide-body{padding:1.1rem 1.4rem 1.4rem;}
+.guide-intro{
+  font-family:'Lora',serif;font-size:.92rem;line-height:1.6;
+  color:var(--text2);margin-bottom:1.2rem;
+  padding-bottom:1rem;border-bottom:1px solid var(--border2);
+}
+.guide-step{
+  display:flex;gap:.85rem;margin-bottom:1rem;
+}
+.guide-step-n{
+  flex-shrink:0;width:28px;height:28px;
+  background:var(--green-dark);color:#F5EDD4;
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:'IBM Plex Mono',monospace;font-size:.78rem;font-weight:500;
+}
+.guide-step-title{
+  font-family:'Lora',serif;font-size:.92rem;font-weight:500;
+  color:var(--text);margin-bottom:.25rem;
+}
+.guide-step-text{
+  font-family:'Lora',serif;font-size:.82rem;line-height:1.55;
+  color:var(--text2);
+}
+.guide-step-text a{color:var(--green-mid);text-decoration:underline;}
+.guide-step-text code{
+  font-family:'IBM Plex Mono',monospace;font-size:.78rem;
+  background:var(--code-bg);padding:.05rem .35rem;border-radius:2px;
+  color:var(--text);
+}
+.guide-troubleshooting{
+  margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--border2);
+}
+.guide-tr-title{
+  font-family:'IBM Plex Mono',monospace;font-size:.65rem;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--text3);
+  margin-bottom:.5rem;
+}
+.guide-tr-list{
+  list-style:none;padding:0;
+}
+.guide-tr-list li{
+  font-family:'Lora',serif;font-size:.78rem;line-height:1.55;
+  color:var(--text2);margin-bottom:.4rem;
+  padding-left:1rem;position:relative;
+}
+.guide-tr-list li::before{
+  content:"·";position:absolute;left:0;color:var(--amber);font-weight:700;
+}
+.guide-tr-list strong{color:var(--amber);font-weight:500;}
+.guide-footer{
+  display:flex;gap:.5rem;justify-content:flex-end;flex-wrap:wrap;
+  margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--border2);
+}
+
+@media(max-width:480px){
+  .guide-box{margin:0;}
+  .guide-modal{padding:.5rem;}
+  .cfg-section{padding:.8rem .85rem;}
+  .locked-view{padding:1.5rem 1rem;}
+}
+
+/* ════════════════════════════════════════
+   v8 · NUEVAS SECCIONES
+════════════════════════════════════════ */
+
+/* ── Toggle de IA en el header ── */
+.ai-toggle{
+  display:flex;align-items:center;gap:.4rem;
+  cursor:pointer;user-select:none;
+  padding:.2rem .5rem;border-radius:14px;
+  border:1px solid var(--header-border);
+  background:var(--toolbar-bg);
+  transition:background .2s,border-color .2s;
+}
+.ai-toggle:hover{border-color:var(--green-mid);}
+.ai-toggle-label{
+  font-family:'IBM Plex Mono',monospace;font-size:.52rem;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--text2);
+}
+.ai-switch{
+  position:relative;width:30px;height:16px;border-radius:10px;
+  background:var(--border);transition:background .2s;flex-shrink:0;
+}
+.ai-switch.on{background:var(--green-mid);}
+.ai-switch::after{
+  content:"";position:absolute;top:2px;left:2px;
+  width:12px;height:12px;border-radius:50%;
+  background:var(--bg2);transition:transform .2s;
+}
+.ai-switch.on::after{transform:translateX(14px);}
+@media(max-width:640px){.ai-toggle-label{display:none;}}
+
+/* ── Subtítulos de grupo en sidebar (reusa .s-sec) ── */
+
+/* ── Modal de proyecto ── */
+.proj-modal{
+  position:fixed;inset:0;z-index:1200;display:none;
+  align-items:flex-start;justify-content:center;
+  padding:2rem 1rem;overflow-y:auto;
+  background:rgba(0,0,0,.45);backdrop-filter:blur(3px);
+}
+.proj-box{
+  max-width:600px;width:100%;margin:auto;
+  background:var(--card-bg);border:1px solid var(--card-border);
+  border-radius:8px;box-shadow:0 16px 48px var(--shadow2);
+  animation:introIn .4s cubic-bezier(.16,1,.3,1) both;
+}
+.proj-head{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:1.1rem 1.3rem .9rem;border-bottom:1px solid var(--border2);
+}
+.proj-title{
+  font-family:'Cormorant Garamond',serif;font-size:1.35rem;
+  font-weight:600;color:var(--green-mid);
+}
+.proj-title em{font-style:italic;color:var(--text2);font-size:.85rem;font-weight:400;}
+.proj-close{
+  background:none;border:none;font-size:1.1rem;cursor:pointer;
+  color:var(--text3);padding:.2rem .4rem;border-radius:4px;
+}
+.proj-close:hover{background:var(--bg3);color:var(--text);}
+.proj-body{padding:1.1rem 1.3rem 1.4rem;}
+.proj-intro{
+  font-family:'Lora',serif;font-size:.84rem;line-height:1.55;
+  color:var(--text2);margin-bottom:1.1rem;
+}
+.proj-field{margin-bottom:.95rem;}
+.proj-flabel{
+  display:block;font-family:'IBM Plex Mono',monospace;font-size:.56rem;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--text3);
+  margin-bottom:.3rem;
+}
+.proj-finput,.proj-fta{
+  width:100%;font-family:'Lora',serif;font-size:.85rem;
+  background:var(--input-bg);color:var(--text);
+  border:1px solid var(--input-border);border-radius:4px;
+  padding:.5rem .65rem;outline:none;transition:border-color .2s;
+}
+.proj-finput:focus,.proj-fta:focus{border-color:var(--green-mid);}
+.proj-fta{resize:vertical;min-height:54px;line-height:1.5;}
+.proj-footer{
+  display:flex;gap:.5rem;justify-content:flex-end;flex-wrap:wrap;
+  margin-top:.4rem;
+}
+
+/* Banner recordatorio de respaldo */
+.backup-banner{
+  display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;
+  background:var(--err-bg);border:1px solid var(--err-border);
+  border-radius:5px;padding:.55rem .8rem;margin-bottom:1rem;
+}
+.backup-banner-text{
+  flex:1;min-width:180px;font-family:'Lora',serif;font-size:.76rem;
+  color:var(--text2);line-height:1.4;
+}
+.backup-banner-text strong{color:var(--amber);font-weight:600;}
+
+/* ── Banner de proyecto activo (en herramientas) ── */
+.proj-chip{
+  display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;
+  background:var(--bg3);border:1px solid var(--border2);
+  border-radius:5px;padding:.4rem .7rem;margin-bottom:.7rem;
+}
+.proj-chip-tema{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:.92rem;color:var(--green-mid);flex:1;min-width:120px;
+}
+.proj-chip-tema span{color:var(--text3);font-style:normal;font-size:.7rem;font-family:'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;}
+.proj-chip-edit{
+  font-family:'IBM Plex Mono',monospace;font-size:.54rem;
+  letter-spacing:.08em;text-transform:uppercase;
+  background:none;border:1px solid var(--border2);color:var(--text2);
+  padding:.22rem .5rem;border-radius:3px;cursor:pointer;transition:all .15s;
+}
+.proj-chip-edit:hover{border-color:var(--green-mid);color:var(--green-mid);}
+
+/* ── Selector fragmento / archivo ── */
+.src-tabs{
+  display:flex;gap:.3rem;margin-bottom:.6rem;
+}
+.src-tab{
+  font-family:'IBM Plex Mono',monospace;font-size:.58rem;
+  letter-spacing:.08em;text-transform:uppercase;
+  padding:.32rem .7rem;border-radius:4px;cursor:pointer;
+  background:var(--bg3);border:1px solid var(--border2);color:var(--text2);
+  transition:all .15s;
+}
+.src-tab.active{
+  background:var(--green-dark);color:#F5EDD4;border-color:var(--green-dark);
+}
+.src-pick{
+  width:100%;font-family:'Lora',serif;font-size:.82rem;
+  background:var(--input-bg);color:var(--text);
+  border:1px solid var(--input-border);border-radius:4px;
+  padding:.5rem .6rem;outline:none;margin-bottom:.5rem;cursor:pointer;
+}
+
+/* ── Codificar / Analizar v8: layout doble panel ── */
+.work-view{
+  display:grid;grid-template-columns:1fr 340px;
+  gap:1rem;padding:1.1rem 1.3rem;height:100%;overflow:hidden;
+}
+@media(max-width:900px){
+  .work-view{grid-template-columns:1fr;overflow-y:auto;height:auto;}
+}
+.work-main{
+  display:flex;flex-direction:column;min-height:0;overflow-y:auto;
+  padding-right:.3rem;
+}
+.work-head{margin-bottom:.5rem;}
+.work-title{
+  font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;
+  color:var(--text);display:flex;align-items:center;gap:.5rem;
+}
+.work-title em{font-style:italic;font-size:.78rem;color:var(--text3);font-weight:400;}
+.work-sub{
+  font-family:'Lora',serif;font-style:italic;font-size:.8rem;
+  color:var(--text2);margin-top:.1rem;
+}
+.work-label{
+  font-family:'IBM Plex Mono',monospace;font-size:.56rem;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--text3);
+  margin:.7rem 0 .35rem;
+}
+.work-input{
+  width:100%;font-family:'Lora',serif;font-size:.88rem;line-height:1.55;
+  background:var(--input-bg);color:var(--text);
+  border:1px solid var(--input-border);border-radius:5px;
+  padding:.7rem .85rem;outline:none;resize:vertical;min-height:120px;
+  transition:border-color .2s;
+}
+.work-input:focus{border-color:var(--green-mid);}
+/* El espacio de escritura del usuario — protagonista */
+.work-writing{
+  width:100%;font-family:'Lora',serif;font-size:.95rem;line-height:1.7;
+  background:var(--bg2);color:var(--text);
+  border:1.5px solid var(--green-mid);border-radius:6px;
+  padding:1rem 1.1rem;outline:none;resize:vertical;min-height:240px;
+  transition:border-color .2s,box-shadow .2s;
+  box-shadow:0 1px 4px var(--shadow);
+}
+.work-writing:focus{border-color:var(--green-dark);box-shadow:0 2px 10px var(--shadow);}
+.work-writing-head{
+  display:flex;justify-content:space-between;align-items:center;
+  margin:.9rem 0 .4rem;
+}
+.work-writing-title{
+  font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600;
+  color:var(--green-dark);
+}
+[data-theme="dark"] .work-writing-title{color:var(--green-mid);}
+
+/* Códigos del usuario (chips editables) */
+.usercodes-row{
+  display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;
+  margin:.5rem 0 .2rem;
+}
+.usercode-chip{
+  display:inline-flex;align-items:center;gap:.3rem;
+  font-family:'IBM Plex Mono',monospace;font-size:.68rem;
+  background:var(--hl-green);border:1px solid var(--hl-green-b);
+  color:var(--green-dark);padding:.2rem .55rem;border-radius:12px;cursor:default;
+}
+[data-theme="dark"] .usercode-chip{color:var(--text);}
+.usercode-chip .uc-x{cursor:pointer;opacity:.5;font-size:.6rem;}
+.usercode-chip .uc-x:hover{opacity:1;}
+.usercode-add{
+  font-family:'IBM Plex Mono',monospace;font-size:.62rem;
+  background:none;border:1px dashed var(--border);color:var(--text3);
+  padding:.18rem .5rem;border-radius:12px;cursor:pointer;transition:all .15s;
+}
+.usercode-add:hover{border-color:var(--green-mid);color:var(--green-mid);}
+.usercode-input{
+  font-family:'IBM Plex Mono',monospace;font-size:.66rem;
+  background:var(--input-bg);color:var(--text);
+  border:1px solid var(--input-border);border-radius:12px;
+  padding:.18rem .5rem;outline:none;width:120px;
+}
+
+/* Panel lateral de sugerencias IA — diferenciado */
+.ai-panel{
+  display:flex;flex-direction:column;min-height:0;
+  background:var(--hist-bg);border:1px solid var(--border2);
+  border-radius:6px;overflow:hidden;
+}
+.ai-panel-head{
+  display:flex;align-items:center;gap:.45rem;
+  padding:.6rem .8rem;border-bottom:1px solid var(--border2);
+  background:var(--code-bg);
+}
+.ai-panel-sym{font-size:.85rem;color:var(--green-mid);}
+.ai-panel-title{
+  font-family:'IBM Plex Mono',monospace;font-size:.56rem;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--text2);flex:1;
+}
+.ai-panel-tag{
+  font-family:'IBM Plex Mono',monospace;font-size:.46rem;
+  letter-spacing:.08em;text-transform:uppercase;
+  background:var(--badge-bg);color:var(--badge-text);
+  padding:.1rem .35rem;border-radius:8px;
+}
+.ai-panel-body{
+  flex:1;overflow-y:auto;padding:.75rem .85rem;
+  font-family:'Lora',serif;font-size:.8rem;line-height:1.55;color:var(--text2);
+}
+.ai-panel-run{
+  margin:.65rem;padding:.5rem;border-radius:5px;cursor:pointer;
+  background:var(--green-dark);color:#F5EDD4;border:1px solid var(--green-dark);
+  font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.06em;
+  text-transform:uppercase;transition:opacity .2s;
+}
+.ai-panel-run:hover{opacity:.88;}
+.ai-panel-run:disabled{opacity:.4;cursor:default;}
+.ai-panel-empty{
+  text-align:center;color:var(--text3);padding:1.5rem .5rem;
+  font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;
+}
+.ai-panel-empty .aps{font-size:1.6rem;opacity:.3;display:block;margin-bottom:.4rem;}
+.ai-sugg-codes{
+  display:flex;flex-wrap:wrap;gap:.35rem;margin:.3rem 0 .6rem;
+}
+.ai-sugg-code{
+  font-family:'IBM Plex Mono',monospace;font-size:.64rem;
+  background:var(--bg3);border:1px dashed var(--green-mid);
+  color:var(--green-mid);padding:.2rem .5rem;border-radius:12px;cursor:pointer;
+  transition:all .15s;
+}
+.ai-sugg-code:hover{background:var(--hl-green);}
+.ai-sugg-code::after{content:" +";opacity:.6;}
+
+/* Cuando la IA está OFF, ocultar todo lo IA */
+.app.ai-off .ai-panel,
+.app.ai-off .ai-only{display:none !important;}
+.app.ai-off .work-view{grid-template-columns:1fr;}
+
+/* ── Materiales ── */
+.mat-card{
+  padding:.7rem .9rem;border:1px solid var(--border2);border-radius:5px;
+  margin-bottom:.4rem;background:var(--card-bg);
+  display:flex;align-items:center;justify-content:space-between;gap:.8rem;
+  transition:border-color .2s;
+}
+.mat-card:hover{border-color:var(--border);}
+.mat-card-name{
+  font-family:'Lora',serif;font-size:.86rem;color:var(--text);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.mat-card-meta{
+  font-family:'IBM Plex Mono',monospace;font-size:.5rem;color:var(--text4);
+  margin-top:.18rem;letter-spacing:.06em;
+}
+.mat-type-tag{
+  font-family:'IBM Plex Mono',monospace;font-size:.46rem;
+  letter-spacing:.06em;text-transform:uppercase;
+  padding:.08rem .35rem;border-radius:3px;margin-right:.4rem;
+}
+
+/* ── Nube de vínculos ── */
+.nube-tabs{
+  display:flex;gap:.35rem;margin:.6rem 0 1rem;flex-wrap:wrap;
+}
+.nube-tab{
+  font-family:'IBM Plex Mono',monospace;font-size:.56rem;
+  letter-spacing:.08em;text-transform:uppercase;
+  padding:.32rem .7rem;border-radius:4px;cursor:pointer;
+  background:var(--bg3);border:1px solid var(--border2);color:var(--text2);
+  transition:all .15s;
+}
+.nube-tab.active{background:var(--green-dark);color:#F5EDD4;border-color:var(--green-dark);}
+.link-group{
+  border:1px solid var(--border2);border-radius:6px;
+  margin-bottom:.7rem;background:var(--card-bg);overflow:hidden;
+}
+.link-group-head{
+  display:flex;align-items:center;gap:.5rem;
+  padding:.55rem .8rem;background:var(--bg3);cursor:pointer;
+}
+.link-group-code{
+  font-family:'IBM Plex Mono',monospace;font-size:.74rem;
+  color:var(--green-dark);font-weight:500;flex:1;
+}
+[data-theme="dark"] .link-group-code{color:var(--green-mid);}
+.link-group-count{
+  font-family:'IBM Plex Mono',monospace;font-size:.54rem;
+  background:var(--badge-bg);color:var(--badge-text);
+  padding:.1rem .4rem;border-radius:9px;
+}
+.link-group-body{padding:.3rem .8rem .6rem;}
+.link-item{
+  display:flex;align-items:center;gap:.5rem;
+  padding:.32rem 0;border-top:1px solid var(--border2);
+  font-family:'Lora',serif;font-size:.78rem;color:var(--text2);
+}
+.link-item:first-child{border-top:none;}
+.link-item-src{
+  font-family:'IBM Plex Mono',monospace;font-size:.5rem;
+  color:var(--text4);text-transform:uppercase;letter-spacing:.06em;
+}
+.saved-card{
+  border:1px solid var(--border2);border-radius:6px;
+  padding:.75rem .9rem;margin-bottom:.55rem;background:var(--card-bg);
+}
+.saved-card-head{
+  display:flex;justify-content:space-between;align-items:flex-start;gap:.6rem;
+  margin-bottom:.35rem;
+}
+.saved-card-title{
+  font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;color:var(--text);
+}
+.saved-card-date{font-family:'IBM Plex Mono',monospace;font-size:.5rem;color:var(--text4);flex-shrink:0;}
+.saved-card-body{
+  font-family:'Lora',serif;font-size:.8rem;line-height:1.5;color:var(--text2);
+  max-height:5.5em;overflow:hidden;position:relative;
+}
+.saved-card-codes{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.45rem;}
+</style>
+</head>
+<body>
+
+<!-- ╔════════════════════════════════════╗ -->
+<!-- ║  INTRO SCREEN                       ║ -->
+<!-- ╚════════════════════════════════════╝ -->
+<div id="intro-screen">
+  <div class="intro-box">
+    <div class="intro-sigil">◈</div>
+    <div class="intro-title">Cuaderno <em>Etnográfico</em></div>
+    <div class="intro-subtitle">Asistente de investigación cualitativa · v7 · híbrido</div>
+    <div class="intro-divider"></div>
+    <p class="intro-desc">
+      Una plataforma de acompañamiento metodológico para etnógrafxs, investigadorxs sociales y estudiantes de ciencias sociales. Combiná las herramientas clásicas del trabajo de campo (codificación, anotación, lectura analítica, construcción bibliográfica) con análisis asistido por inteligencia artificial — <em>de uso opcional, gratuito y con tu propia clave</em>.
+    </p>
+    <div class="intro-features">
+      <div class="intro-feat">
+        <span class="intro-feat-sym" style="color:#2D6A4F">◈</span>
+        <div class="intro-feat-text">
+          <span class="intro-feat-title">Codificar <span class="intro-aitag">IA</span></span>
+          Analizá fragmentos de notas de campo con asistencia IA. Categorías emergentes y pistas analíticas.
+        </div>
+      </div>
+      <div class="intro-feat">
+        <span class="intro-feat-sym" style="color:#1E3A2F">◉</span>
+        <div class="intro-feat-text">
+          <span class="intro-feat-title">Analizar <span class="intro-aitag">IA</span></span>
+          Descripción densa asistida. Tensiones, escalas y preguntas abiertas desde tus materiales.
+        </div>
+      </div>
+      <div class="intro-feat">
+        <span class="intro-feat-sym" style="color:#B85C38">◎</span>
+        <div class="intro-feat-text">
+          <span class="intro-feat-title">Citar</span>
+          APA 7 y Chicago 17 desde formulario o pegando datos sueltos. Funciona sin IA.
+        </div>
+      </div>
+      <div class="intro-feat">
+        <span class="intro-feat-sym" style="color:#7B5EA7">◌</span>
+        <div class="intro-feat-text">
+          <span class="intro-feat-title">Bibliografía <span class="intro-aitag">IA</span></span>
+          Búsqueda multilingüe sin sesgo Norte-Sur ni de género. Calidad sobre cantidad, voces diversas.
+        </div>
+      </div>
+      <div class="intro-feat">
+        <span class="intro-feat-sym" style="color:#2A5A8C">✎</span>
+        <div class="intro-feat-text">
+          <span class="intro-feat-title">Materiales</span>
+          Cargá notas de campo, entrevistas y documentos. TXT, MD, PDF y DOCX, extraídos localmente.
+        </div>
+      </div>
+      <div class="intro-feat">
+        <span class="intro-feat-sym" style="color:#7B5EA7">◆</span>
+        <div class="intro-feat-text">
+          <span class="intro-feat-title">Nube del proyecto</span>
+          Tus códigos y análisis guardados, y los vínculos entre ellos. Todo en tu navegador.
+        </div>
+      </div>
+    </div>
+    <button class="intro-enter-btn" id="intro-enter-btn">
+      <span>◈</span> Comenzar investigación
+    </button>
+    <div class="intro-note">
+      Tu trabajo se guarda solo en este navegador · La IA es opcional (clave gratuita de Gemini) · Conviene exportar de vez en cuando un respaldo
+    </div>
+  </div>
+</div>
+
+<!-- ╔════════════════════════════════════╗ -->
+<!-- ║  APP                                ║ -->
+<!-- ╚════════════════════════════════════╝ -->
+<div class="app" id="app" style="opacity:0;transition:opacity .4s ease;">
+
+  <header class="hdr">
+    <div class="hdr-left">
+      <div class="hdr-title">Cuaderno <em>Etnográfico</em></div>
+      <div class="hdr-sub">Asistente de investigación cualitativa</div>
+    </div>
+    <div class="hdr-right">
+      <div class="hdr-status">
+        <span class="status-dot" id="status-dot" style="background:#B85C38"></span>
+        <span id="status-label">Iniciando…</span>
+      </div>
+      <div class="ai-toggle" id="ai-toggle" title="Activar o desactivar el acompañamiento de la IA">
+        <span class="ai-toggle-label">IA</span>
+        <span class="ai-switch" id="ai-switch"></span>
+      </div>
+      <button class="theme-btn" id="theme-btn" title="Cambiar tema">☀️</button>
+    </div>
+  </header>
+
+  <div class="toast hidden" id="toast"></div>
+
+  <!-- Code popup -->
+  <div class="code-popup" id="code-popup">
+    <div class="code-popup-title">Asignar código analítico</div>
+    <input class="code-popup-input" id="code-popup-input" placeholder="nombre del código…"/>
+    <div class="code-suggs" id="code-popup-suggs"></div>
+    <div class="code-popup-actions">
+      <button class="code-popup-btn code-popup-confirm" id="code-popup-ok">Asignar</button>
+      <button class="code-popup-btn code-popup-cancel" id="code-popup-cancel">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Modal de proyecto -->
+  <div class="proj-modal" id="proj-modal">
+    <div class="proj-box">
+      <div class="proj-head">
+        <div class="proj-title">Tu proyecto <em>· memoria de la investigación</em></div>
+        <button class="proj-close" id="proj-close">✕</button>
+      </div>
+      <div class="proj-body">
+        <div class="proj-intro">
+          Contale a la herramienta de qué se trata tu investigación. Esta información queda guardada solo en tu navegador y acompaña cada consulta a la IA, para que las sugerencias se mantengan dentro del marco de tu proyecto. Podés editarla cuando quieras.
+        </div>
+        <div class="proj-field">
+          <label class="proj-flabel">Tema de investigación</label>
+          <input class="proj-finput" id="proj-tema" placeholder="Ej: Relaciones intergeneracionales y tecnología digital en familias"/>
+        </div>
+        <div class="proj-field">
+          <label class="proj-flabel">Objetivos</label>
+          <textarea class="proj-fta" id="proj-objetivos" placeholder="¿Qué buscás comprender o describir?"></textarea>
+        </div>
+        <div class="proj-field">
+          <label class="proj-flabel">Enfoque teórico</label>
+          <textarea class="proj-fta" id="proj-enfoque" placeholder="Autores, corrientes o conceptos que orientan tu mirada"></textarea>
+        </div>
+        <div class="proj-field">
+          <label class="proj-flabel">Campo / terreno</label>
+          <input class="proj-finput" id="proj-campo" placeholder="Ej: un club de barrio en el conurbano bonaerense"/>
+        </div>
+        <div class="proj-field">
+          <label class="proj-flabel">Preguntas de investigación</label>
+          <textarea class="proj-fta" id="proj-preguntas" placeholder="Una por línea"></textarea>
+        </div>
+        <div class="proj-footer">
+          <button class="gbtn green" id="proj-save">Guardar proyecto</button>
+          <button class="gbtn outline" id="proj-skip">Ahora no</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <aside class="sidebar" id="sidebar"></aside>
+    <div class="content" id="content"></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+// CONFIG — Gemini API (gratis, sin tarjeta)
+// ═══════════════════════════════════════════════════════════════════════════
+const GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta/models";
+const DEFAULT_MODEL = "gemini-2.5-flash";
+const MODEL_OPTIONS = [
+  { id: "gemini-2.5-flash",      label: "Flash 2.5",      desc: "Equilibrado · 250 consultas/día gratis · recomendado" },
+  { id: "gemini-2.5-flash-lite", label: "Flash-Lite 2.5", desc: "Más rápido · 1.000 consultas/día gratis" },
+  { id: "gemini-2.5-pro",        label: "Pro 2.5",        desc: "Más profundo · 100 consultas/día gratis" },
+];
+
+const MODES = {
+  codificar:{
+    symbol:"◈",label:"Codificar",sub:"Notas de campo",btn:"Buscar pistas",color:"#2D6A4F",
+    placeholder:"Pegá aquí un fragmento de tus notas de campo…\n\nEj: «Llegué al BioCorredor a las 10am. Marta estaba regando las plantas…»",
+    system:`Sos un acompañante metodológico en una investigación etnográfica. Tu rol es ampliar la mirada de quien investiga — no reemplazar su análisis, sino abrirlo.\n\n**PALABRAS QUE RESUENAN**\n4-6 términos, frases o gestos del fragmento que merecen atención especial. Para cada uno, formulá una pregunta abierta.\n\n**POSIBLES ENTRADAS ANALÍTICAS**\n3-4 perspectivas desde las cuales *podría* analizarse este material. Presentalas como opciones, no como la lectura correcta.\n\n**LO QUE QUEDA EN EL BORDE**\n¿Qué no aparece en el fragmento pero podría ser significativo? ¿Qué se dice, qué se calla, qué se presupone?\n\n**PREGUNTAS PARA VOLVER AL CAMPO**\n3-4 preguntas concretas para llevar a la próxima observación.\n\n**UNA CONEXIÓN POSIBLE**\nUn solo autor/a o concepto que *podría* resonar — presentado como apertura, no como respuesta obligatoria.\n\nUsá un tono intelectualmente curioso, nunca autoritativo.\n\n—\nAl terminar, en una línea aparte, escribí exactamente:\n[CATS]: categoría1 | categoría2 | categoría3\n(3-5 categorías analíticas emergentes, separadas por |)`
+  },
+  analizar:{
+    symbol:"◉",label:"Analizar",sub:"Descripción densa",btn:"Abrir el material",color:"#1E3A2F",
+    placeholder:"Pegá aquí el fragmento que querés trabajar en profundidad…",
+    system:`Sos un interlocutor académico en una investigación etnográfica.\n\n**¿QUÉ ESTÁ PASANDO AQUÍ?**\nDescripción densa sin interpretar todavía.\n\n**TENSIONES QUE EL MATERIAL ABRE**\nContradicciones, ambigüedades o paradojas. Nombralas sin resolverlas.\n\n**ESCALAS EN JUEGO**\nCómo se toca lo singular con procesos más amplios.\n\n**PREGUNTAS QUE DEJA ABIERTAS**\n4-5 interrogantes que este fragmento genera.\n\n**SI TUVIERAS QUE APOSTAR UN HILO...**\nCuál sería el nudo analítico más productivo. Presentalo como una apuesta personal.`
+  },
+  citar:{
+    symbol:"◎",label:"Citar",sub:"Referencias",btn:"Formatear cita",color:"#B85C38",
+    placeholder:"Ingresá los datos de la fuente como los tengas (desordenados o incompletos)…",
+    system:`Sos un especialista en normas bibliográficas para ciencias sociales.\n\nA partir de los datos proporcionados (aunque estén incompletos), generá:\n\n**APA 7ma edición**\nReferencia completa + ejemplo de cita en el texto.\n\n**Chicago 17ma ed. — Autor-Fecha**\nReferencia completa + cita en el texto.\n\n**Nota al pie estilo Chicago**\n(Primera mención y siguientes.)\n\nSi faltan datos, indicalo claramente. No inventes información.`
+  },
+  recomendar:{
+    symbol:"◌",label:"Recomendar",sub:"Bibliografía",btn:"Explorar bibliografía",color:"#7B5EA7",
+    placeholder:"Describí el tema, problema o pregunta que estás trabajando…",
+    system:`Sos un/a guía bibliográfico/a crítico/a para ciencias sociales, antropología y estudios culturales. Tu tarea es recomendar bibliografía de calidad real —no popularidad— sobre la temática planteada.
+
+CRITERIOS DE SELECCIÓN (aplicalos siempre, sin excepción):
+- Relevancia conceptual y rigor metodológico por encima del índice de citas o la fama del nombre.
+- Equilibrio geográfico activo: Norte Global (Europa, EEUU, Canadá, Australia) y Sur Global (América Latina, África, Asia, Medio Oriente, Oceanía indígena) tienen igual peso. No completar secciones "del sur" como anexo: integrá las voces de forma transversal.
+- Equilibrio de género: incluí autoras, investigadoras no-binarias y colectivos de escritura mixta en todas las secciones, no solo en una sección específica.
+- Diversidad lingüística: buscá obras en español, portugués, inglés, francés, alemán, italiano, árabe, swahili, hindi, lenguas indígenas con escritura y otras lenguas relevantes para la temática. Indicá el idioma original cuando no sea español o cuando esté disponible en más de un idioma. Nunca limitarte a la producción angloparlante.
+- Incluí textos inéditos, tesis doctorales, informes de investigación, publicaciones en revistas regionales y producción colectiva o activista cuando sean pertinentes.
+- Si una obra clásica tiene sesgos importantes (coloniales, androcéntricos, etc.), nómbralos brevemente junto con la recomendación.
+
+**OBRAS FUNDAMENTALES**
+3-4 textos de referencia ineludibles para el tema. Para cada uno/a: autor/a (con pronombres si los usa públicamente o son relevantes), año, título, idioma original, por qué es clave, una advertencia si aplica.
+
+**PERSPECTIVAS DEL SUR GLOBAL**
+3-4 aportes desde América Latina, África, Asia u Oceanía —no como "voces locales" sino como teoría de alcance general. Incluí tanto producción en español/portugués como en otras lenguas.
+
+**APORTES FEMINISTAS, DECOLONIALES Y DISIDENTES**
+3-4 obras que desafíen los marcos dominantes del campo desde el género, la decolonialidad, la disidencia epistémica o la interseccionalidad. Pueden solaparse con otras secciones.
+
+**DIÁLOGOS CONTEMPORÁNEOS**
+3 debates o conversaciones actuales en el campo (post-2010), con al menos una obra no publicada en inglés o en una editorial del Norte Global.
+
+**CONCEPTOS CLAVE COMO HERRAMIENTAS**
+4-6 nociones operativas para trabajar el tema, con el/la autor/a que las acuñó o reformuló de forma más productiva —que no siempre es quien más se cita.
+
+**PUNTO DE ENTRADA**
+Una sola obra, accesible y representativa, para quien no conoce el campo. Justificá la elección.
+
+Usá un tono de colega que comparte lecturas, no de enciclopedia. Podés señalar tensiones entre autores/as.`
+  }
+};
+const TOOL_KEYS = ["codificar","analizar","citar","recomendar"];
+const AI_KEYS = ["codificar","analizar","recomendar"];  // requieren clave Gemini
+const MATERIAL_KEYS = ["notas-campo","entrevistas","documentos"];
+// Tipos de material y su metadata visual.
+const MATERIAL_TYPES = {
+  "notas-campo":{sym:"✎",col:"#2A5A8C",name:"Notas de campo",sub:"Registro de campo",tag:"Campo"},
+  "entrevistas":{sym:"❝",col:"#B85C38",name:"Entrevistas",sub:"Transcripciones",tag:"Entrev."},
+  "documentos":{sym:"◧",col:"#7B5EA7",name:"Documentos",sub:"Bibliografía y referencia",tag:"Doc."}
+};
+// Estructura agrupada del menú: encabezados + ítems.
+const SIDEBAR_GROUPS = [
+  {section:"Proyecto", items:[
+    {key:"proyecto",sym:"◈",col:"#2D6A4F",name:"Mi proyecto",sub:"Memoria de la investigación"},
+  ]},
+  {section:"Materiales", items:[
+    {key:"notas-campo",sym:"✎",col:"#2A5A8C",name:"Notas de campo",sub:"Cargar y leer",badgeType:"notas-campo"},
+    {key:"entrevistas",sym:"❝",col:"#B85C38",name:"Entrevistas",sub:"Transcripciones",badgeType:"entrevistas"},
+    {key:"documentos",sym:"◧",col:"#7B5EA7",name:"Documentos",sub:"Bibliografía",badgeType:"documentos"},
+  ]},
+  {section:"Herramientas", items:[
+    {key:"codificar",sym:"◈",col:"#2D6A4F",name:"Codificar",sub:"Códigos analíticos",ai:true},
+    {key:"analizar",sym:"◉",col:"#1E3A2F",name:"Analizar",sub:"Descripción densa",ai:true},
+    {key:"citar",sym:"◎",col:"#B85C38",name:"Citar",sub:"Referencias"},
+    {key:"recomendar",sym:"◌",col:"#7B5EA7",name:"Recomendar",sub:"Bibliografía",ai:true},
+    {key:"nube",sym:"◆",col:"#7B5EA7",name:"Nube",sub:"Vínculos y guardados",badgeType:"saved"},
+  ]},
+  {section:"", items:[
+    {key:"config",sym:"⚙",col:"#5C5040",name:"Configuración",sub:"IA, datos, ayuda"},
+  ]},
+];
+
+// ═══════════════════════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════════════════════
+let mode = "codificar";
+let input = "";
+let output = "";
+let loading = false;
+let history = [];
+let cats = {};
+let docs = [];
+let notes = [];
+let activeDocId = null;
+let annotTab = "highlights";
+let hlMode = false;
+let codeMode = false;
+let codePopupData = null;
+let errMsg = "";
+let errDetail = null;       // { title, detail, action } — error estructurado
+let loaded = false;
+let darkMode = false;
+let showGuide = false;       // ¿mostrar modal de guía Gemini?
+
+// ── v8: estado nuevo ──
+let aiOn = true;             // toggle de IA (se combina con hasKey())
+let project = {tema:"",objetivos:"",enfoque:"",campo:"",preguntas:""};
+let materials = [];          // materiales tipados: {id,type,name,text,date}
+let savedCodes = [];         // códigos del usuario: {id,code,note,source,sourceName,date}
+let savedAnalyses = [];      // análisis del usuario: {id,title,body,codes,source,sourceName,date}
+let workMode = {codificar:{src:"fragmento",matId:"",text:""}, analizar:{src:"fragmento",matId:"",text:""}};
+let workSugg = {codificar:"", analizar:""};       // texto de sugerencias IA por modo
+let workSuggCodes = {codificar:[], analizar:[]};  // códigos sugeridos por IA
+let workDraftCodes = [];     // códigos que el usuario va creando en codificar (sesión)
+let workDraftMemo = "";      // memo en curso (codificar)
+let workDraftAnaTitle = "";  // título en curso (analizar)
+let workDraftAnaBody = "";   // análisis en curso (analizar)
+let nubeTab = "vinculos";    // vinculos | codigos | analisis
+
+// ═══════════════════════════════════════════════════════════════════════════
+// STORAGE
+// ═══════════════════════════════════════════════════════════════════════════
+const SK = {
+  cats:"etno-cats", docs:"etno-docs", notes:"etno-notes", hist:"etno-hist", theme:"etno-theme",
+  apiKey:"etno-api-key", model:"etno-model", introSeen:"etno-intro-seen",
+  project:"etno-project", aiOn:"etno-ai-on", materials:"etno-materials",
+  savedCodes:"etno-saved-codes", savedAnalyses:"etno-saved-analyses"
+};
+function stLoad(key){try{const r=localStorage.getItem(key);return r?JSON.parse(r):null;}catch{return null;}}
+function stSave(key,val){try{localStorage.setItem(key,JSON.stringify(val));}catch{}}
+function stRemove(key){try{localStorage.removeItem(key);}catch{}}
+
+// AI availability helpers
+function hasKey(){ return !!stLoad(SK.apiKey); }
+function getKey(){ return stLoad(SK.apiKey) || ""; }
+function getModel(){ return stLoad(SK.model) || DEFAULT_MODEL; }
+function setKey(k){ if(k) stSave(SK.apiKey,k); else stRemove(SK.apiKey); }
+function setModel(m){ stSave(SK.model,m); }
+
+// ── v8: estado de IA (toggle global) ──
+// La IA está "activa" cuando hay clave Y el usuario no la apagó manualmente.
+function aiEnabled(){ return hasKey() && aiOn; }
+function setAiOn(v){ aiOn = v; stSave(SK.aiOn, v); }
+
+// ── v8: proyecto del usuario (memoria contextual) ──
+function projectFilled(){
+  return !!(project.tema || project.objetivos || project.enfoque || project.campo || project.preguntas);
+}
+// Construye el preámbulo de sistema con el contexto del proyecto.
+function projectContext(){
+  if(!projectFilled()) return "";
+  const p = project;
+  let ctx = "\n\n— CONTEXTO DEL PROYECTO DE INVESTIGACIÓN (marco dentro del cual debés operar siempre) —\n";
+  if(p.tema)       ctx += `Tema: ${p.tema}\n`;
+  if(p.objetivos)  ctx += `Objetivos: ${p.objetivos}\n`;
+  if(p.enfoque)    ctx += `Enfoque teórico: ${p.enfoque}\n`;
+  if(p.campo)      ctx += `Campo / terreno: ${p.campo}\n`;
+  if(p.preguntas)  ctx += `Preguntas de investigación:\n${p.preguntas}\n`;
+  ctx += "Mantené tus aportes dentro de este marco. No impongas tu lectura: ofrecé aperturas.\n—";
+  return ctx;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// THEME
+// ═══════════════════════════════════════════════════════════════════════════
+function applyTheme(dark){
+  darkMode = dark;
+  document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+  const btn = document.getElementById("theme-btn");
+  if(btn) btn.textContent = dark ? "🌙" : "☀️";
+  stSave(SK.theme, dark);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════════════════════════════════
+let toastTimer;
+function showToast(msg){
+  const el=document.getElementById("toast");
+  el.textContent=msg; el.classList.remove("hidden");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.add("hidden"),3000);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// PROJECT MODAL — memoria contextual del proyecto
+// ═══════════════════════════════════════════════════════════════════════════
+function openProjectModal(){
+  document.getElementById("proj-tema").value      = project.tema || "";
+  document.getElementById("proj-objetivos").value = project.objetivos || "";
+  document.getElementById("proj-enfoque").value   = project.enfoque || "";
+  document.getElementById("proj-campo").value     = project.campo || "";
+  document.getElementById("proj-preguntas").value = project.preguntas || "";
+  document.getElementById("proj-modal").style.display = "flex";
+}
+function closeProjectModal(){
+  document.getElementById("proj-modal").style.display = "none";
+}
+function saveProjectFromModal(){
+  project = {
+    tema:      document.getElementById("proj-tema").value.trim(),
+    objetivos: document.getElementById("proj-objetivos").value.trim(),
+    enfoque:   document.getElementById("proj-enfoque").value.trim(),
+    campo:     document.getElementById("proj-campo").value.trim(),
+    preguntas: document.getElementById("proj-preguntas").value.trim()
+  };
+  persist();
+  closeProjectModal();
+  showToast(projectFilled() ? "Proyecto guardado ✓" : "Proyecto vacío guardado");
+  render();
+}
+// Bindings del modal de proyecto (una sola vez).
+function bindProjectModal(){
+  document.getElementById("proj-close").addEventListener("click", closeProjectModal);
+  document.getElementById("proj-skip").addEventListener("click", closeProjectModal);
+  document.getElementById("proj-save").addEventListener("click", saveProjectFromModal);
+  document.getElementById("proj-modal").addEventListener("click", e=>{
+    if(e.target.id==="proj-modal") closeProjectModal();
+  });
+}
+// Chip de proyecto activo que se muestra arriba de las herramientas.
+function projectChipHtml(){
+  if(!projectFilled()){
+    return `<div class="proj-chip">
+      <span class="proj-chip-tema"><span>Sin proyecto · </span>definí tu investigación para enfocar las sugerencias</span>
+      <button class="proj-chip-edit" id="proj-chip-define">◈ Definir proyecto</button>
+    </div>`;
+  }
+  return `<div class="proj-chip">
+    <span class="proj-chip-tema"><span>Proyecto · </span>${esc(project.tema || "(sin título)")}</span>
+    <button class="proj-chip-edit" id="proj-chip-define">Editar</button>
+  </div>`;
+}
+function bindProjectChip(){
+  document.getElementById("proj-chip-define")?.addEventListener("click", openProjectModal);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// API — Gemini con manejo detallado de errores
+// ═══════════════════════════════════════════════════════════════════════════
+
+// Devuelve un mensaje de error legible según lo que devolvió Gemini.
+// Pensado para que tu colega (y cualquier usuario) sepa exactamente qué hacer.
+function diagnoseGeminiError(status, errorBody) {
+  const msg = (errorBody?.error?.message || "").toLowerCase();
+  const code = errorBody?.error?.code || status;
+  const errStatus = (errorBody?.error?.status || "").toUpperCase();
+
+  if (!hasKey()) {
+    return {
+      title: "⚠ Aún no configuraste tu clave de Gemini",
+      detail: "Las funciones con IA están desactivadas. Andá a la pestaña 'Configuración' (◆ en el menú) para activarlas. Es gratis y toma 5 minutos.",
+      action: "config"
+    };
+  }
+  if (status === 0 || status === undefined) {
+    return {
+      title: "⚠ Sin conexión",
+      detail: "No se pudo contactar con Google. Verificá tu conexión a internet, o probá de nuevo en unos segundos.",
+      action: "retry"
+    };
+  }
+  if (code === 400 && msg.includes("api key not valid")) {
+    return {
+      title: "⚠ La clave no es válida",
+      detail: "La clave de Gemini que pegaste no la reconoce Google. Posibles causas: (1) la copiaste mal (debe empezar con 'AIza' y tener ~39 caracteres); (2) la borraste en Google AI Studio; (3) usaste una clave de otro servicio de Google que no es la API de Gemini. Andá a Configuración y volvé a pegarla.",
+      action: "config"
+    };
+  }
+  if (code === 400) {
+    return {
+      title: "⚠ Solicitud incorrecta",
+      detail: "Google rechazó la solicitud. Si pasa con un PDF muy grande, probá uno más chico. Detalle técnico: " + (errorBody?.error?.message || "—"),
+      action: "retry"
+    };
+  }
+  if (code === 401 || code === 403) {
+    if (msg.includes("region") || msg.includes("country") || msg.includes("location")) {
+      return {
+        title: "⚠ Bloqueo geográfico",
+        detail: "Google bloqueó la solicitud por la ubicación detectada. Si tenés una VPN activa, desactivala. Si estás en un país no soportado, no hay forma de usar Gemini directamente desde ahí.",
+        action: "config"
+      };
+    }
+    if (msg.includes("permission") || errStatus === "PERMISSION_DENIED") {
+      return {
+        title: "⚠ Permiso denegado",
+        detail: "Posibles causas: (1) tu cuenta de Google necesita verificación de edad (tenés que tener 18+ confirmados en tu cuenta); (2) la API de Gemini no está habilitada en tu proyecto de Google AI Studio; (3) la clave es de un proyecto distinto al que tiene la API habilitada. Volvé a aistudio.google.com con la misma cuenta y aceptá los términos.",
+        action: "config"
+      };
+    }
+    return {
+      title: "⚠ No autorizado",
+      detail: "Google no autorizó la solicitud. Revisá que tu clave sea correcta y que aceptaste los términos en aistudio.google.com. Detalle: " + (errorBody?.error?.message || "—"),
+      action: "config"
+    };
+  }
+  if (code === 429) {
+    return {
+      title: "⚠ Llegaste al tope de consultas",
+      detail: "Excediste el límite gratuito de Gemini para este modelo. Esperá un minuto y volvé a probar. Si te pasa seguido, probá cambiar a 'Flash-Lite' en Configuración (tiene 1.000 consultas por día en lugar de 250).",
+      action: "config"
+    };
+  }
+  if (code === 413 || msg.includes("too large") || msg.includes("size limit")) {
+    return {
+      title: "⚠ Archivo demasiado grande",
+      detail: "El contenido que enviaste supera el límite de la API. Si era un PDF, probá uno más liviano o partilo en partes.",
+      action: "retry"
+    };
+  }
+  if (code >= 500) {
+    return {
+      title: "⚠ Error del servidor de Google",
+      detail: "Google tiene un problema en sus servidores. No es algo tuyo. Esperá unos minutos y volvé a probar.",
+      action: "retry"
+    };
+  }
+  return {
+    title: "⚠ Error inesperado",
+    detail: "Google devolvió un error que no reconocemos. Detalle técnico: " + JSON.stringify(errorBody?.error || { status, message: "sin detalle" }),
+    action: "retry"
+  };
+}
+
+// Estructura del body para Gemini, compartida entre streaming y no-streaming.
+function buildGeminiBody(system, userContent, options = {}) {
+  // userContent puede ser string o array (para multimodal).
+  const userParts = (typeof userContent === "string")
+    ? [{ text: userContent }]
+    : userContent;
+  return {
+    systemInstruction: { parts: [{ text: system }] },
+    contents: [{ role: "user", parts: userParts }],
+    generationConfig: {
+      maxOutputTokens: options.maxTokens || 4000,
+      temperature: options.temperature ?? 0.85,
+      topP: 0.95
+    },
+    // Para investigación etnográfica conviene que la IA no se autocensure por temas sensibles.
+    safetySettings: [
+      { category: "HARM_CATEGORY_HARASSMENT",        threshold: "BLOCK_ONLY_HIGH" },
+      { category: "HARM_CATEGORY_HATE_SPEECH",       threshold: "BLOCK_ONLY_HIGH" },
+      { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_ONLY_HIGH" },
+      { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_ONLY_HIGH" }
+    ]
+  };
+}
+
+// Llamada con streaming (efecto "typewriter" para los modos principales).
+async function streamGemini(system, userContent, onChunk, options = {}) {
+  if (!hasKey()) throw { _diag: diagnoseGeminiError(undefined, {}) };
+  const model = getModel();
+  const sys = system + projectContext();
+  const url = `${GEMINI_BASE}/${encodeURIComponent(model)}:streamGenerateContent?alt=sse&key=${encodeURIComponent(getKey())}`;
+  let res;
+  try {
+    res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(buildGeminiBody(sys, userContent, options))
+    });
+  } catch (netErr) {
+    throw { _diag: diagnoseGeminiError(0, {}) };
+  }
+  if (!res.ok) {
+    let body = {};
+    try { body = await res.json(); } catch {}
+    throw { _diag: diagnoseGeminiError(res.status, body) };
+  }
+  const reader = res.body.getReader();
+  const dec = new TextDecoder();
+  let buf = "";
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buf += dec.decode(value, { stream: true });
+    const lines = buf.split("\n");
+    buf = lines.pop();
+    for (const l of lines) {
+      const line = l.trim();
+      if (!line.startsWith("data:")) continue;
+      const data = line.slice(5).trim();
+      if (!data || data === "[DONE]") continue;
+      try {
+        const p = JSON.parse(data);
+        // Detectar bloqueo por safety filters.
+        const finishReason = p.candidates?.[0]?.finishReason;
+        if (finishReason === "SAFETY" || finishReason === "RECITATION") {
+          throw {
+            _diag: {
+              title: "⚠ Respuesta bloqueada por Google",
+              detail: "Gemini bloqueó la respuesta por sus filtros de contenido (motivo: " + finishReason + "). Probá reformular el texto o usar un modelo distinto desde Configuración.",
+              action: "retry"
+            }
+          };
+        }
+        const txt = p.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (txt) onChunk(txt);
+      } catch (e) {
+        if (e._diag) throw e;
+        // Líneas mal formadas se ignoran.
+      }
+    }
+  }
+}
+
+// Llamada sin streaming (para tareas puntuales como codificación auto de notas).
+async function callGemini(system, userContent, options = {}) {
+  if (!hasKey()) throw { _diag: diagnoseGeminiError(undefined, {}) };
+  const model = getModel();
+  const sys = system + projectContext();
+  const url = `${GEMINI_BASE}/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(getKey())}`;
+  let res;
+  try {
+    res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(buildGeminiBody(sys, userContent, options))
+    });
+  } catch {
+    throw { _diag: diagnoseGeminiError(0, {}) };
+  }
+  if (!res.ok) {
+    let body = {};
+    try { body = await res.json(); } catch {}
+    throw { _diag: diagnoseGeminiError(res.status, body) };
+  }
+  const data = await res.json();
+  const finishReason = data.candidates?.[0]?.finishReason;
+  if (finishReason === "SAFETY" || finishReason === "RECITATION") {
+    throw {
+      _diag: {
+        title: "⚠ Respuesta bloqueada por Google",
+        detail: "Gemini bloqueó la respuesta por sus filtros de contenido (motivo: " + finishReason + ").",
+        action: "retry"
+      }
+    };
+  }
+  return data.candidates?.[0]?.content?.parts?.map(p => p.text || "").join("") || "";
+}
+
+// Test rápido de conexión: para usar desde Configuración.
+async function testGeminiConnection() {
+  if (!hasKey()) return { ok: false, diag: diagnoseGeminiError(undefined, {}) };
+  try {
+    const out = await callGemini(
+      "Respondé en una sola palabra.",
+      "Decí únicamente la palabra: listo",
+      { maxTokens: 20, temperature: 0.1 }
+    );
+    return { ok: true, sample: out };
+  } catch (e) {
+    return { ok: false, diag: e._diag || { title: "⚠ Falló el test", detail: String(e) } };
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// MARKDOWN
+// ═══════════════════════════════════════════════════════════════════════════
+function renderMd(text){
+  const ri=t=>t
+    .replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>")
+    .replace(/\*(.*?)\*/g,"<em>$1</em>")
+    .replace(/`(.*?)`/g,`<code style="font-family:'IBM Plex Mono',monospace;font-size:.82em;background:var(--bg3);padding:1px 5px;border-radius:2px;color:var(--text);">$1</code>`);
+  let html="";
+  text.split("\n").forEach((line,i)=>{
+    if(/^\*\*[^*]+\*\*$/.test(line.trim()))
+      html+=`<div class="md-sec"${i>0?' style="margin-top:1.4em"':''}">${line.replace(/\*\*/g,"")}</div>`;
+    else if(/^[-•]\s/.test(line))
+      html+=`<div class="md-bul"><span class="md-dot">◦</span><span>${ri(line.replace(/^[-•]\s/,""))}</span></div>`;
+    else if(line.trim()==="")
+      html+=`<div style="height:.5em"></div>`;
+    else
+      html+=`<p style="margin:0 0 .35em;color:var(--text)">${ri(line)}</p>`;
+  });
+  return html;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════════════════════════
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function activeDoc(){return docs.find(d=>d.id===activeDocId)||null;}
+function catTotal(){return Object.values(cats).reduce((s,c)=>s+c,0);}
+function persist(){
+  stSave(SK.cats,cats); stSave(SK.docs,docs);
+  stSave(SK.notes,notes); stSave(SK.hist,history.slice(0,12));
+  stSave(SK.project,project); stSave(SK.materials,materials);
+  stSave(SK.savedCodes,savedCodes); stSave(SK.savedAnalyses,savedAnalyses);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SIDEBAR
+// ═══════════════════════════════════════════════════════════════════════════
+function renderSidebar(){
+  const isMobile=window.innerWidth<640;
+  const sb=document.getElementById("sidebar");
+  const aiAvail = aiEnabled();
+  let html="";
+  for(const group of SIDEBAR_GROUPS){
+    if(!isMobile && group.section) html+=`<div class="s-sec">${group.section}</div>`;
+    else if(!isMobile && !group.section) html+=`<hr class="s-div">`;
+    for(const it of group.items){
+      let badge=null;
+      if(it.badgeType==="saved") badge=(savedCodes.length+savedAnalyses.length)||null;
+      else if(it.badgeType) badge=materials.filter(m=>m.type===it.badgeType).length||null;
+      const isLocked = it.ai && !aiAvail;
+      const lockChip = isLocked ? `<span class="s-lock" title="Activá la IA (toggle arriba) y configurá tu clave">◌</span>` : "";
+      html+=`<button class="s-btn${mode===it.key?" active":""}${isLocked?" s-locked":""}" data-key="${it.key}">
+        <span class="s-sym" style="color:${it.col}">${it.sym}</span>
+        <div class="s-texts"><span class="s-name">${it.name}${it.ai?' <span class="s-aitag">IA</span>':''}</span><span class="s-sub">${it.sub}</span></div>
+        ${badge?`<span class="s-badge">${badge}</span>`:lockChip}
+      </button>`;
+    }
+  }
+  if(!isMobile) html+=`<div class="s-footer">Cuaderno<br>Etnográfico<br>v8 · híbrido</div>`;
+  sb.innerHTML=html;
+  sb.querySelectorAll(".s-btn").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const k=btn.dataset.key;
+      if(k==="proyecto"){ openProjectModal(); return; }
+      mode=k; activeDocId=null; hlMode=false; codeMode=false;
+      if(TOOL_KEYS.includes(k)) output="";
+      errDetail=null;
+      render();
+    });
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// STATUS
+// ═══════════════════════════════════════════════════════════════════════════
+function updateStatus(){
+  const dot=document.getElementById("status-dot");
+  const lbl=document.getElementById("status-label");
+  // Reflejar el toggle de IA
+  const sw=document.getElementById("ai-switch");
+  if(sw) sw.classList.toggle("on", aiEnabled());
+  if(!loaded){dot.style.background="#B85C38";lbl.textContent="Cargando…";return;}
+  if(aiEnabled()){
+    dot.style.background="#34A853";
+    dot.style.boxShadow="0 0 4px rgba(52,168,83,.5)";
+    lbl.textContent="IA activada · Guardado automático";
+  } else if(hasKey()){
+    dot.style.background="#B85C38";
+    dot.style.boxShadow="0 0 4px rgba(184,92,56,.5)";
+    lbl.textContent="IA en pausa · Guardado automático";
+  } else {
+    dot.style.background="#B85C38";
+    dot.style.boxShadow="0 0 4px rgba(184,92,56,.5)";
+    lbl.textContent="Sin IA · Guardado automático";
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TOOL VIEW
+// ═══════════════════════════════════════════════════════════════════════════
+function renderToolView(){
+  // Citar tiene render especial (formulario estructurado + opcional IA).
+  if(mode==="citar"){ renderCitarView(); return; }
+
+  // Si es modo IA y la IA no está disponible (sin clave o apagada): pantalla de bloqueo.
+  if(AI_KEYS.includes(mode) && !aiEnabled()){
+    renderLockedToolView();
+    return;
+  }
+
+  const m=MODES[mode];
+  const hasOutput=!!output;
+  const histHtml=history.length===0
+    ?`<div style="font-family:'Cormorant Garamond',serif;font-size:.8rem;font-style:italic;color:var(--empty);padding:.3rem;">Tus consultas previas aparecerán aquí</div>`
+    :history.map((h,i)=>`<div class="hist-item" data-hi="${i}">
+        <div style="display:flex;justify-content:space-between;">
+          <span class="hist-mode">${h.symbol} ${h.label}</span>
+          <span class="hist-time">${h.time}</span>
+        </div>
+        <div class="hist-preview">${esc(h.input)}</div>
+      </div>`).join("");
+
+  const errHtml = errDetail
+    ? `<div class="err-detail">
+        <div class="err-detail-title">${esc(errDetail.title)}</div>
+        <div class="err-detail-body">${esc(errDetail.detail)}</div>
+        ${errDetail.action==="config" ? `<button class="err-detail-btn" id="err-go-config">⚙ Ir a Configuración</button>` : ""}
+       </div>`
+    : "";
+
+  document.getElementById("content").innerHTML=`
+    <div class="tool-view">
+      <div class="input-zone">
+        <div class="zone-head">
+          <div class="zone-title"><span style="color:${m.color}">${m.symbol}</span> ${m.label} <em>/ ${m.sub}</em></div>
+          <span class="zone-hint">Ctrl+Enter para enviar</span>
+        </div>
+        <textarea id="main-ta" class="field-ta" style="min-height:100px" placeholder="${m.placeholder.replace(/\n/g,"&#10;")}">${esc(input)}</textarea>
+        <div class="zone-actions">
+          <span class="char-count" id="char-count">${input.length} caracteres</span>
+          <button id="submit-btn" class="submit-btn" ${loading||!input.trim()?"disabled":""}>
+            ${loading?`<span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span> Pensando…`:`${m.symbol} ${m.btn}`}
+          </button>
+        </div>
+      </div>
+      <div class="output-zone" id="output-zone">
+        <div>
+          <div class="out-head">
+            <span class="out-label">Pistas y aperturas</span>
+            ${hasOutput&&!loading?`<button class="copy-btn" id="copy-out-btn">◎ Copiar</button>`:""}
+          </div>
+          ${errHtml}
+          <div class="out-card${!hasOutput&&!loading&&!errDetail?" out-empty":""}" id="out-card">
+            ${!hasOutput&&!loading
+              ?(errDetail?"":`<div style="text-align:center;color:var(--empty);">
+                  <div style="font-size:1.8rem;margin-bottom:.4rem;opacity:.3">${m.symbol}</div>
+                  <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:var(--text2);">Las pistas para seguir pensando<br>aparecerán aquí</div>
+                </div>`)
+              :`<div id="md-out">${renderMd(output)}</div>${loading?'<span class="cursor-blink"></span>':''}`}
+          </div>
+        </div>
+        <div class="hist-panel">
+          <div class="hist-label">Historial · sesión</div>
+          ${histHtml}
+        </div>
+      </div>
+    </div>`;
+
+  const ta=document.getElementById("main-ta");
+  ta.addEventListener("input",()=>{
+    input=ta.value;
+    document.getElementById("char-count").textContent=`${input.length} caracteres`;
+    document.getElementById("submit-btn").disabled=loading||!input.trim();
+  });
+  ta.addEventListener("keydown",e=>{if(e.key==="Enter"&&(e.ctrlKey||e.metaKey)) handleSubmit();});
+  document.getElementById("submit-btn").addEventListener("click",handleSubmit);
+  document.getElementById("copy-out-btn")?.addEventListener("click",()=>{navigator.clipboard.writeText(output);showToast("Copiado ✓");});
+  document.getElementById("err-go-config")?.addEventListener("click",()=>{mode="config";errDetail=null;render();});
+  document.querySelectorAll(".hist-item").forEach(el=>{
+    el.addEventListener("click",()=>{
+      const h=history[+el.dataset.hi];
+      mode=h.mode; input=h.input; output=h.output; render();
+    });
+  });
+}
+
+// Pantalla cuando se entra a un modo IA sin clave o con IA en pausa.
+function renderLockedToolView(){
+  const m=MODES[mode];
+  const paused = hasKey() && !aiOn;
+  document.getElementById("content").innerHTML=`
+    <div class="locked-view">
+      <div class="locked-sigil" style="color:${m.color}">${m.symbol}</div>
+      <div class="locked-title">${m.label} <em>· ${paused?"IA en pausa":"requiere IA"}</em></div>
+      <div class="locked-desc">
+        ${paused
+          ? "Tenés la IA desactivada con el interruptor de arriba. Esta sección usa IA. Activá el interruptor «IA» en el encabezado para usarla."
+          : "Este modo usa inteligencia artificial para acompañar tu análisis. Para activarlo necesitás una clave gratuita de Google Gemini — no requiere tarjeta de crédito y toma 5 minutos."}
+      </div>
+      <div class="locked-features">
+        <div class="locked-feat"><span class="locked-feat-bullet">·</span> Gratis siempre, sin pagar</div>
+        <div class="locked-feat"><span class="locked-feat-bullet">·</span> Sin tarjeta de crédito</div>
+        <div class="locked-feat"><span class="locked-feat-bullet">·</span> Tu clave queda solo en tu navegador, nunca pasa por nosotros</div>
+      </div>
+      <div class="locked-actions">
+        ${paused
+          ? `<button class="gbtn green" id="locked-enable-ai">◈ Activar la IA</button>`
+          : `<button class="gbtn green" id="locked-go-config">⚙ Configurar clave de Gemini</button>
+             <button class="gbtn outline" id="locked-show-guide">Cómo conseguirla (guía)</button>`}
+      </div>
+      <div class="locked-alt">
+        Mientras tanto, podés usar <strong>Materiales</strong>, <strong>Citar</strong> y <strong>Nube</strong> sin IA.
+      </div>
+    </div>`;
+  document.getElementById("locked-go-config")?.addEventListener("click",()=>{mode="config";render();});
+  document.getElementById("locked-show-guide")?.addEventListener("click",()=>{showGuide=true;renderGuideModal();});
+  document.getElementById("locked-enable-ai")?.addEventListener("click",()=>{setAiOn(true);render();});
+}
+
+async function handleSubmit(){
+  if(!input.trim()||loading) return;
+  if(!hasKey()){
+    errMsg=""; errDetail=diagnoseGeminiError(undefined,{});
+    renderToolView();
+    return;
+  }
+  loading=true; output=""; errMsg=""; errDetail=null;
+  renderToolView();
+  const m=MODES[mode];
+  let acc="";
+  try{
+    await streamGemini(m.system,input.trim(),chunk=>{
+      acc+=chunk; output=acc;
+      const card=document.getElementById("out-card");
+      const oz=document.getElementById("output-zone");
+      if(card){
+        card.classList.remove("out-empty");
+        card.innerHTML=`<div id="md-out">${renderMd(acc)}</div><span class="cursor-blink"></span>`;
+      }
+      if(oz) oz.scrollTop=oz.scrollHeight;
+    },{maxTokens:3500,temperature:0.85});
+    if(mode==="codificar"){
+      const cm=acc.match(/\[CATS\]:\s*(.+)/);
+      if(cm){
+        const nc=cm[1].split("|").map(c=>c.trim()).filter(Boolean);
+        nc.forEach(k=>{const kk=k.toLowerCase();cats[kk]=(cats[kk]||0)+1;});
+        showToast(`${nc.length} categoría${nc.length!==1?"s":""} guardada${nc.length!==1?"s":""} ✓`);
+        acc=acc.replace(/\n?\[CATS\]:.*$/,"").trim();
+        output=acc;
+      }
+    }
+    history=[{mode,label:m.label,symbol:m.symbol,input:input.trim(),output:acc,
+      time:new Date().toLocaleTimeString("es-AR",{hour:"2-digit",minute:"2-digit"})},...history].slice(0,12);
+    persist();
+  }catch(e){
+    errDetail = e._diag || { title:"⚠ Error inesperado", detail:String(e), action:"retry" };
+  }
+  loading=false;
+  render();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// NOTAS VIEW
+// ═══════════════════════════════════════════════════════════════════════════
+function renderNotasView(){
+  const c=document.getElementById("content");
+  c.innerHTML=`<div class="alt-view" id="notas-view">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.3rem;flex-wrap:wrap;gap:.5rem;">
+      <div>
+        <div class="alt-title">✎ Cuaderno de notas</div>
+        <div class="alt-sub" id="notas-sub">${notes.length} nota${notes.length!==1?"s":""} · guardadas automáticamente</div>
+      </div>
+      <button class="gbtn green" id="add-note-btn">+ Nueva nota</button>
+    </div>
+    <div id="notes-list"></div>
+  </div>`;
+  document.getElementById("add-note-btn").addEventListener("click",()=>{
+    const n={id:"note_"+Date.now(),title:"Nueva nota",body:"",codes:[],
+      date:new Date().toLocaleDateString("es-AR",{day:"2-digit",month:"2-digit",year:"2-digit"})};
+    notes=[n,...notes]; persist(); renderNotasView();
+  });
+  renderNotesList();
+}
+
+function renderNotesList(){
+  const list=document.getElementById("notes-list");
+  if(!list) return;
+  if(notes.length===0){
+    list.innerHTML=`<div style="text-align:center;padding:3rem 1rem;color:var(--empty);">
+      <div style="font-size:2rem;margin-bottom:.5rem;opacity:.3">✎</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--text2);">
+        Tus notas de campo aparecerán aquí.<br>Podés codificarlas manualmente o con IA.
+      </div></div>`;
+    return;
+  }
+  list.innerHTML=notes.map(n=>buildNoteHtml(n)).join("");
+  bindNoteEvents();
+}
+
+function buildNoteHtml(n){
+  const codesHtml=(n.codes||[]).map(c=>`<span class="note-code-chip" data-nid="${n.id}" data-code="${esc(c)}">${esc(c)} <span style="opacity:.5;font-size:.6rem">✕</span></span>`).join("");
+  return `<div class="note-item" id="note-${n.id}">
+    <div class="note-hdr">
+      <input class="note-title-input" value="${esc(n.title)}" data-nid="${n.id}" placeholder="Sin título"/>
+      <span class="note-date">${n.date}</span>
+      <button class="gbtn outline" style="font-size:.5rem;padding:.18rem .45rem;" data-edit="${n.id}">Editar</button>
+      <button class="ann-del" data-del-note="${n.id}">✕</button>
+    </div>
+    <div class="note-codes-row" id="codes-row-${n.id}">
+      ${codesHtml}
+      <span id="code-adder-${n.id}">
+        <button class="add-code-btn" data-add-code="${n.id}">+ código</button>
+      </span>
+      <button class="add-code-btn" style="border-color:var(--code-border);color:var(--green-mid);" data-ai-code="${n.id}">◈ IA</button>
+    </div>
+    <div class="note-body" id="note-body-${n.id}" data-nid="${n.id}">${esc(n.body)||'<em style="color:var(--text4);font-size:.82rem">Hacé clic para editar…</em>'}</div>
+  </div>`;
+}
+
+function bindNoteEvents(){
+  document.querySelectorAll(".note-title-input").forEach(inp=>{
+    inp.addEventListener("blur",()=>{
+      const nid=inp.dataset.nid;
+      const n=notes.find(x=>x.id===nid); if(!n) return;
+      n.title=inp.value; persist();
+    });
+  });
+  document.querySelectorAll("[data-edit]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const nid=btn.dataset.edit;
+      const n=notes.find(x=>x.id===nid); if(!n) return;
+      const bodyEl=document.getElementById(`note-body-${nid}`);
+      if(btn.textContent.trim()==="Editar"){
+        bodyEl.innerHTML=`<textarea class="note-body-edit" rows="${Math.max(4,n.body.split('\n').length+1)}">${esc(n.body)}</textarea>`;
+        btn.textContent="✓ Guardar";
+      } else {
+        const ta=bodyEl.querySelector("textarea");
+        n.body=ta.value;
+        bodyEl.innerHTML=esc(n.body)||'<em style="color:var(--text4);font-size:.82rem">Hacé clic para editar…</em>';
+        btn.textContent="Editar";
+        persist();
+      }
+    });
+  });
+  document.querySelectorAll(".note-body").forEach(bd=>{
+    bd.addEventListener("click",()=>{
+      const nid=bd.dataset.nid; const n=notes.find(x=>x.id===nid); if(!n) return;
+      if(bd.querySelector("textarea")) return;
+      const btn=document.querySelector(`[data-edit="${nid}"]`);
+      if(btn) btn.click();
+    });
+  });
+  document.querySelectorAll("[data-del-note]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const nid=btn.dataset.delNote;
+      notes=notes.filter(n=>n.id!==nid); persist(); showToast("Nota eliminada"); renderNotesList();
+    });
+  });
+  document.querySelectorAll(".note-code-chip").forEach(chip=>{
+    chip.addEventListener("click",()=>{
+      const nid=chip.dataset.nid, code=chip.dataset.code;
+      const n=notes.find(x=>x.id===nid); if(!n) return;
+      n.codes=n.codes.filter(c=>c!==code); persist(); renderNotesList();
+    });
+  });
+  document.querySelectorAll("[data-add-code]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const nid=btn.dataset.addCode;
+      const span=document.getElementById(`code-adder-${nid}`);
+      span.innerHTML=`<input style="width:90px;padding:.04rem .28rem;font-family:'IBM Plex Mono',monospace;font-size:.6rem;background:var(--card-bg);color:var(--text);border:1px solid var(--input-border);border-radius:3px;outline:none;" id="code-input-${nid}" placeholder="código…"/>
+        <button style="padding:.08rem .35rem;font-size:.58rem;border-radius:3px;background:var(--green-dark);color:#F5EDD4;border:1px solid var(--green-dark);cursor:pointer;" data-save-code="${nid}">+</button>
+        <button style="padding:.08rem .35rem;font-size:.58rem;border-radius:3px;background:transparent;border:1px solid var(--border2);color:var(--text3);cursor:pointer;" data-cancel-code="${nid}">✕</button>`;
+      const cinp=document.getElementById(`code-input-${nid}`);
+      cinp.focus();
+      cinp.addEventListener("keydown",e=>{if(e.key==="Enter") saveCodeInline(nid,cinp.value);if(e.key==="Escape") renderNotesList();});
+      document.querySelector(`[data-save-code="${nid}"]`).addEventListener("click",()=>saveCodeInline(nid,cinp.value));
+      document.querySelector(`[data-cancel-code="${nid}"]`).addEventListener("click",()=>renderNotesList());
+    });
+  });
+  document.querySelectorAll("[data-ai-code]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const nid=btn.dataset.aiCode;
+      const n=notes.find(x=>x.id===nid); if(n) aiCodeNote(n);
+    });
+  });
+}
+
+function saveCodeInline(nid,val){
+  const c=val.trim().toLowerCase(); if(!c) return;
+  const n=notes.find(x=>x.id===nid); if(!n) return;
+  n.codes=[...new Set([...(n.codes||[]),c])];
+  cats[c]=(cats[c]||0)+1; persist(); renderNotesList();
+}
+
+async function aiCodeNote(note){
+  if(!hasKey()){
+    showToast("Configurá tu clave de Gemini primero");
+    mode="config"; render(); return;
+  }
+  showToast("La IA está sugiriendo códigos…");
+  try{
+    const res=await callGemini(
+      "Sos un analista cualitativo etnográfico. Devolvé SOLO JSON: {\"codes\":[\"código1\",\"código2\"]}. Sin markdown, sin backticks.",
+      `Nota de campo:\nTítulo: ${note.title}\n\n${note.body}\n\nSugerí 3-5 códigos analíticos breves (1-3 palabras). Solo JSON.`,
+      {maxTokens:500, temperature:0.7}
+    );
+    let codes=[];
+    try{const clean=res.replace(/```json|```/g,"").trim();codes=JSON.parse(clean).codes||[];}
+    catch{codes=res.match(/["']([^"']{2,40})["']/g)?.map(c=>c.replace(/["']/g,""))||[];}
+    if(codes.length===0){showToast("No se pudieron generar códigos");return;}
+    const n=notes.find(x=>x.id===note.id); if(!n) return;
+    const newCodes=[...new Set([...(n.codes||[]),...codes.map(c=>c.toLowerCase())])];
+    n.codes=newCodes;
+    codes.forEach(c=>{const k=c.toLowerCase();cats[k]=(cats[k]||0)+1;});
+    persist(); showToast(`${codes.length} códigos sugeridos ✓`); renderNotesList();
+  }catch(e){
+    const d=e._diag||{title:"Error",detail:"No se pudieron generar códigos"};
+    showToast(d.title.replace(/⚠ /,""));
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// DOCUMENTS VIEW
+// ═══════════════════════════════════════════════════════════════════════════
+function renderDocListView(){
+  document.getElementById("content").innerHTML=`
+    <div class="alt-view">
+      <div class="alt-title">◧ Documentos</div>
+      <div class="alt-sub">Subí, leé y anotá tus materiales de campo · TXT · MD · PDF</div>
+      <div class="upload-zone" id="upload-zone">
+        <input type="file" id="doc-file-input" accept=".txt,.md,.csv,.pdf" multiple style="display:none"/>
+        <div style="font-size:1.6rem;margin-bottom:.5rem;opacity:.3">◧</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:300;color:var(--text2);margin-bottom:.22rem;">
+          Arrastrá archivos o hacé clic para cargar
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text4);">
+          TXT · MD · CSV · PDF (texto extraído localmente, sin enviar a la nube)
+        </div>
+      </div>
+      <div id="docs-list">
+        ${docs.length===0
+          ?`<div style="text-align:center;padding:1.5rem;color:var(--empty);font-family:'Cormorant Garamond',serif;font-style:italic;">Aún no cargaste ningún documento</div>`
+          :docs.map(doc=>`
+            <div style="padding:.8rem .95rem;border:1px solid var(--border2);border-radius:4px;margin-bottom:.38rem;background:var(--card-bg);display:flex;align-items:center;justify-content:space-between;gap:1rem;transition:background .3s,border-color .3s;">
+              <div style="overflow:hidden;">
+                <div style="font-family:'Lora',serif;font-size:.86rem;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(doc.name)}</div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:.5rem;color:var(--text4);margin-top:.18rem;letter-spacing:.06em;">
+                  ${doc.annotations.length} anotacion${doc.annotations.length!==1?"es":""} · ${doc.text.length} chars
+                </div>
+              </div>
+              <div style="display:flex;gap:.38rem;flex-shrink:0;">
+                <button class="dtb outline" data-open-doc="${doc.id}">→ Abrir</button>
+                <button class="dtb danger" data-del-doc="${doc.id}">✕</button>
+              </div>
+            </div>`).join("")}
+      </div>
+    </div>`;
+
+  const uz=document.getElementById("upload-zone");
+  const fi=document.getElementById("doc-file-input");
+  uz.addEventListener("click",()=>fi.click());
+  fi.addEventListener("change",e=>handleFileUpload([...e.target.files]));
+  uz.addEventListener("dragover",e=>{e.preventDefault();uz.classList.add("drag");});
+  uz.addEventListener("dragleave",()=>uz.classList.remove("drag"));
+  uz.addEventListener("drop",e=>{e.preventDefault();uz.classList.remove("drag");handleFileUpload([...e.dataTransfer.files]);});
+  document.querySelectorAll("[data-open-doc]").forEach(btn=>{
+    btn.addEventListener("click",()=>{activeDocId=btn.dataset.openDoc;hlMode=false;codeMode=false;render();});
+  });
+  document.querySelectorAll("[data-del-doc]").forEach(btn=>{
+    btn.addEventListener("click",()=>{docs=docs.filter(d=>d.id!==btn.dataset.delDoc);persist();showToast("Documento eliminado");renderDocListView();});
+  });
+}
+
+async function extractPdfText(file){
+  // Estrategia: pdf.js local primero (gratis, sin IA, sin red).
+  // Si el PDF es escaneado (sin capa de texto), avisamos al usuario.
+  if(!window.pdfjsLib){
+    throw new Error("La librería pdf.js no cargó. Revisá tu conexión a internet y recargá la página.");
+  }
+  // Tope blando: 50 MB para evitar congelar el navegador.
+  if(file.size > 50 * 1024 * 1024){
+    throw new Error("El PDF pesa más de 50 MB. Probá uno más liviano.");
+  }
+  const arrayBuf = await file.arrayBuffer();
+  const pdf = await window.pdfjsLib.getDocument({data: arrayBuf}).promise;
+  let fullText = "";
+  let nonEmptyPages = 0;
+  for(let i = 1; i <= pdf.numPages; i++){
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    const pageText = content.items.map(it => it.str).join(" ").replace(/\s+/g, " ").trim();
+    if(pageText.length > 10) nonEmptyPages++;
+    fullText += pageText + "\n\n";
+    // Actualizar toast en PDFs largos.
+    if(pdf.numPages > 5 && i % 5 === 0) showToast(`Extrayendo página ${i}/${pdf.numPages}…`);
+  }
+  fullText = fullText.replace(/\n{3,}/g, "\n\n").trim();
+  if(nonEmptyPages === 0){
+    throw new Error("No se encontró texto en este PDF. Parece ser un PDF escaneado (imágenes en lugar de texto). pdf.js no puede leerlo. Si configurás Gemini, podríamos intentar con IA, pero no está implementado aún.");
+  }
+  return fullText;
+}
+
+// Extracción de .docx con mammoth.js — local, sin enviar el archivo a ningún lado.
+async function extractDocxText(file){
+  if(!window.mammoth){
+    throw new Error("La librería mammoth.js no cargó. Revisá tu conexión a internet y recargá la página.");
+  }
+  const arrayBuffer = await file.arrayBuffer();
+  const result = await window.mammoth.extractRawText({arrayBuffer});
+  const text = (result.value || "").replace(/\n{3,}/g,"\n\n").trim();
+  if(!text) throw new Error("No se encontró texto en este .docx.");
+  return text;
+}
+
+// Lee cualquier material soportado y devuelve su texto.
+async function readMaterialFile(file){
+  const ext = file.name.split(".").pop().toLowerCase();
+  if(ext==="pdf"){
+    showToast("Extrayendo texto del PDF localmente…");
+    return await extractPdfText(file);
+  } else if(ext==="docx"){
+    showToast("Extrayendo texto del .docx localmente…");
+    return await extractDocxText(file);
+  } else if(["txt","md","csv"].includes(ext)){
+    return await file.text();
+  } else if(ext==="doc"){
+    throw new Error("Los .doc antiguos no se pueden leer en el navegador. Abrilo en Word y guardalo como .docx o .txt.");
+  } else {
+    throw new Error(`Formato no soportado: .${ext}`);
+  }
+}
+
+async function handleFileUpload(files){
+  for(const file of files){
+    const ext=file.name.split(".").pop().toLowerCase();
+    let text="";
+    if(ext==="pdf"){
+      showToast("Extrayendo texto del PDF localmente…");
+      try{
+        text = await extractPdfText(file);
+        if(!text){showToast("No se pudo extraer texto del PDF");continue;}
+        showToast(`PDF procesado · ${text.length} caracteres ✓`);
+      }catch(e){
+        showToast(e.message || "Error al procesar el PDF");
+        continue;
+      }
+    }else if(["txt","md","csv"].includes(ext)){
+      text=await file.text();
+    }else{
+      showToast(`Formato no soportado: .${ext}`);
+      continue;
+    }
+    const doc={id:"doc_"+Date.now()+"_"+Math.random().toString(36).slice(2),name:file.name,text,annotations:[]};
+    docs=[...docs,doc]; persist(); showToast(`"${file.name}" cargado ✓`);
+    activeDocId=doc.id; hlMode=false; codeMode=false; render(); return;
+  }
+  if(mode==="documentos") renderDocListView();
+  renderSidebar();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// DOC READER
+// ═══════════════════════════════════════════════════════════════════════════
+function buildAnnotatedHtml(doc){
+  const sorted=[...doc.annotations].sort((a,b)=>a.start-b.start);
+  let result="",pos=0;
+  for(const ann of sorted){
+    if(ann.start<pos) continue;
+    result+=esc(doc.text.slice(pos,ann.start));
+    const t=esc(doc.text.slice(ann.start,ann.end));
+    if(ann.type==="highlight") result+=`<mark class="hl-y" data-ann="${ann.id}">${t}</mark>`;
+    else result+=`<mark class="hl-g" data-ann="${ann.id}">${t}<span class="code-tag" data-ann="${ann.id}">${esc(ann.code)}</span></mark>`;
+    pos=ann.end;
+  }
+  result+=esc(doc.text.slice(pos));
+  return result.split(/\n\n+/).map(p=>`<p>${p.replace(/\n/g,"<br>")}</p>`).join("");
+}
+
+function refreshDocBody(){
+  const doc=activeDoc(); if(!doc) return;
+  const body=document.getElementById("doc-body");
+  if(body){body.innerHTML=buildAnnotatedHtml(doc);bindDocBodyClicks();}
+  refreshAnnotPanel();
+}
+
+function renderDocReaderView(){
+  const doc=activeDoc(); if(!doc) return;
+  const hi=doc.annotations.filter(a=>a.type==="highlight");
+  const co=doc.annotations.filter(a=>a.type==="code");
+  document.getElementById("content").innerHTML=`
+    <div class="doc-view">
+      <div class="doc-reader">
+        <div class="doc-toolbar">
+          <button class="dtb outline" id="doc-back">← Volver</button>
+          <div class="doc-toolbar-title">${esc(doc.name)}</div>
+          <button class="${"dtb hl-"+(hlMode?"on":"off")}" id="hl-btn">◑ Resaltar</button>
+          <button class="${"dtb code-"+(codeMode?"on":"off")}" id="code-btn">◈ Codificar</button>
+          <button class="dtb outline" id="doc-send-btn">↗ Analizar</button>
+          <button class="dtb outline" id="doc-export-btn">⬇ Exportar</button>
+        </div>
+        <div id="doc-body" class="doc-body" spellcheck="false">${buildAnnotatedHtml(doc)}</div>
+      </div>
+      <div class="annot-panel">
+        <div class="annot-hdr">
+          <div class="annot-hdr-title">Anotaciones</div>
+          <div class="annot-tabs">
+            <div class="ann-tab${annotTab==="highlights"?" active":""}" data-atab="highlights">Resaltados ${hi.length>0?`(${hi.length})`:""}</div>
+            <div class="ann-tab${annotTab==="codes"?" active":""}" data-atab="codes">Códigos ${co.length>0?`(${co.length})`:""}</div>
+          </div>
+        </div>
+        <div class="annot-body" id="annot-body"></div>
+        <div class="annot-ai-sec">
+          <div class="annot-ai-title">Análisis con IA</div>
+          <button class="annot-ai-btn" id="annot-ai-btn" ${doc.annotations.length===0?"disabled":""}>◈ Codificar anotaciones</button>
+        </div>
+      </div>
+    </div>`;
+
+  renderAnnotPanel();
+  bindDocBodyClicks();
+
+  document.getElementById("doc-back").addEventListener("click",()=>{activeDocId=null;hlMode=false;codeMode=false;render();});
+  document.getElementById("hl-btn").addEventListener("click",()=>{
+    hlMode=!hlMode; if(hlMode) codeMode=false;
+    document.getElementById("hl-btn").className="dtb hl-"+(hlMode?"on":"off");
+    document.getElementById("code-btn").className="dtb code-off";
+    showToast(hlMode?"Modo resaltar activado — seleccioná texto":"Modo resaltar desactivado");
+  });
+  document.getElementById("code-btn").addEventListener("click",()=>{
+    codeMode=!codeMode; if(codeMode) hlMode=false;
+    document.getElementById("code-btn").className="dtb code-"+(codeMode?"on":"off");
+    document.getElementById("hl-btn").className="dtb hl-off";
+    showToast(codeMode?"Modo codificar activado — seleccioná texto":"Modo codificar desactivado");
+  });
+  document.getElementById("doc-send-btn").addEventListener("click",()=>{
+    const sel=window.getSelection()?.toString().trim();
+    const doc=activeDoc();
+    mode="analizar";
+    input=sel||doc?.text.slice(0,3000)||"";
+    output=""; activeDocId=null;
+    render();
+  });
+  document.getElementById("doc-export-btn").addEventListener("click",exportAnnotations);
+  document.getElementById("annot-ai-btn").addEventListener("click",aiCodifyAnnotations);
+  document.querySelectorAll(".ann-tab").forEach(tab=>{
+    tab.addEventListener("click",()=>{annotTab=tab.dataset.atab;refreshAnnotPanel();updateAnnotTabs();});
+  });
+
+  const body=document.getElementById("doc-body");
+  body.addEventListener("mouseup",handleDocSelection);
+  body.addEventListener("touchend",handleDocSelection);
+}
+
+function bindDocBodyClicks(){
+  const body=document.getElementById("doc-body"); if(!body) return;
+  body.addEventListener("mouseup",handleDocSelection);
+  body.addEventListener("touchend",handleDocSelection);
+  body.addEventListener("click",e=>{
+    if(e.target.classList.contains("code-tag")){removeAnnotation(e.target.dataset.ann);return;}
+    if(!hlMode&&!codeMode){
+      const mark=e.target.closest("[data-ann]");
+      if(mark) removeAnnotation(mark.dataset.ann);
+    }
+  });
+}
+
+function handleDocSelection(e){
+  if(!hlMode&&!codeMode) return;
+  if(e.target.classList.contains("code-tag")||e.target.closest("[data-ann]")&&!hlMode&&!codeMode) return;
+  const sel=window.getSelection();
+  if(!sel||sel.isCollapsed) return;
+  const range=sel.getRangeAt(0);
+  const body=document.getElementById("doc-body");
+  if(!body||!body.contains(range.startContainer)) return;
+  const txt=range.toString().trim(); if(!txt||txt.length<2) return;
+
+  let startOff=-1,endOff=-1,acc=0;
+  const walker=document.createTreeWalker(body,NodeFilter.SHOW_TEXT);
+  let node;
+  while((node=walker.nextNode())){
+    const len=node.textContent.length;
+    if(node===range.startContainer) startOff=acc+range.startOffset;
+    if(node===range.endContainer){endOff=acc+range.endOffset;break;}
+    acc+=len;
+  }
+  if(startOff===-1){
+    const doc=activeDoc(); if(!doc) return;
+    const idx=doc.text.indexOf(txt);
+    if(idx===-1){sel.removeAllRanges();return;}
+    startOff=idx; endOff=idx+txt.length;
+  }
+  const rect=range.getBoundingClientRect();
+  sel.removeAllRanges();
+
+  if(hlMode){
+    addAnnotation({type:"highlight",start:startOff,end:endOff,text:txt});
+  } else if(codeMode){
+    codePopupData={start:startOff,end:endOff,text:txt,y:rect.bottom+window.scrollY+8,x:rect.left+window.scrollX};
+    showCodePopup();
+  }
+}
+
+function addAnnotation(ann){
+  const doc=activeDoc(); if(!doc) return;
+  ann.id="ann_"+Date.now()+"_"+Math.random().toString(36).slice(2);
+  doc.annotations=[...doc.annotations,ann];
+  persist(); refreshDocBody();
+  showToast(ann.type==="highlight"?"Texto resaltado ✓":`Código "${ann.code}" asignado ✓`);
+}
+
+function removeAnnotation(annId){
+  const doc=activeDoc(); if(!doc) return;
+  doc.annotations=doc.annotations.filter(a=>a.id!==annId);
+  persist(); refreshDocBody(); showToast("Anotación eliminada");
+}
+
+function renderAnnotPanel(){
+  const doc=activeDoc(); if(!doc) return;
+  const ab=document.getElementById("annot-body"); if(!ab) return;
+  const items=doc.annotations.filter(a=>annotTab==="highlights"?a.type==="highlight":a.type==="code");
+  if(items.length===0){
+    ab.innerHTML=`<div class="ann-empty">
+      <div style="font-size:1.5rem;margin-bottom:.4rem;opacity:.25">${annotTab==="highlights"?"◑":"◈"}</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.85rem;color:var(--text3);">
+        ${annotTab==="highlights"?"Activá el modo Resaltar y seleccioná texto":"Activá el modo Codificar y seleccioná texto"}
+      </div></div>`;
+    return;
+  }
+  ab.innerHTML=items.map(ann=>`
+    <div class="ann-item">
+      <div class="ann-text">"${esc(ann.text)}"</div>
+      <div class="ann-meta">
+        ${ann.type==="code"?`<span class="ann-code-lbl">${esc(ann.code)}</span>`:"<span></span>"}
+        <button class="ann-del" data-ann-del="${ann.id}">✕</button>
+      </div>
+    </div>`).join("");
+  ab.querySelectorAll("[data-ann-del]").forEach(btn=>{
+    btn.addEventListener("click",()=>removeAnnotation(btn.dataset.annDel));
+  });
+}
+
+function updateAnnotTabs(){
+  const doc=activeDoc(); if(!doc) return;
+  const hi=doc.annotations.filter(a=>a.type==="highlight");
+  const co=doc.annotations.filter(a=>a.type==="code");
+  document.querySelectorAll(".ann-tab").forEach(tab=>{
+    tab.classList.toggle("active",tab.dataset.atab===annotTab);
+    if(tab.dataset.atab==="highlights") tab.textContent=`Resaltados ${hi.length>0?`(${hi.length})`:""}`;
+    else tab.textContent=`Códigos ${co.length>0?`(${co.length})`:""}`;
+  });
+  const aibtn=document.getElementById("annot-ai-btn");
+  if(aibtn) aibtn.disabled=doc.annotations.length===0;
+}
+
+function refreshAnnotPanel(){renderAnnotPanel(); updateAnnotTabs();}
+
+function exportAnnotations(){
+  const doc=activeDoc(); if(!doc) return;
+  const lines=[`# Anotaciones: ${doc.name}`,`Exportado: ${new Date().toLocaleString("es-AR")}`,""]; 
+  const hl=doc.annotations.filter(a=>a.type==="highlight");
+  const cd=doc.annotations.filter(a=>a.type==="code");
+  if(hl.length){lines.push("## Resaltados");hl.forEach(a=>lines.push(`- "${a.text}"`));lines.push("");}
+  if(cd.length){lines.push("## Códigos");cd.forEach(a=>lines.push(`- [${a.code}] "${a.text}"`));}
+  const blob=new Blob([lines.join("\n")],{type:"text/plain"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");a.href=url;a.download=`anotaciones-${doc.name}.txt`;a.click();
+  URL.revokeObjectURL(url);
+  showToast("Anotaciones exportadas ✓");
+}
+
+async function aiCodifyAnnotations(){
+  const doc=activeDoc(); if(!doc||doc.annotations.length===0) return;
+  if(!hasKey()){
+    showToast("Configurá tu clave de Gemini primero");
+    mode="config"; activeDocId=null; render(); return;
+  }
+  const btn=document.getElementById("annot-ai-btn");
+  if(btn){btn.disabled=true;btn.innerHTML='<span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span> Analizando…';}
+  const annotText=doc.annotations.map((a,i)=>`${i+1}. [${a.type}${a.type==="code"?` / ${a.code}`:""}]: "${a.text}"`).join("\n");
+  try{
+    const res=await callGemini(
+      "Sos un acompañante metodológico en una investigación etnográfica.",
+      `Documento: "${doc.name}"\n\nAnotaciones marcadas:\n${annotText}\n\n**PATRONES QUE EMERGEN**\n3-5 códigos analíticos que agrupan estas anotaciones.\n\n**CONEXIONES ENTRE ANOTACIONES**\nTensiones o contradicciones.\n\n**SIGUIENTE PASO SUGERIDO**\nUna sola pregunta analítica.`,
+      {maxTokens:2000}
+    );
+    mode="codificar"; input=`[Análisis de anotaciones: ${doc.name}]\n\n${annotText}`; output=res;
+    activeDocId=null; render(); showToast("Análisis de anotaciones listo ✓");
+  }catch(e){
+    const d=e._diag||{title:"Error",detail:"Verificá tu conexión"};
+    showToast(d.title.replace(/⚠ /,""));
+    if(btn){btn.disabled=false;btn.innerHTML="◈ Codificar anotaciones";}
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// CODE POPUP
+// ═══════════════════════════════════════════════════════════════════════════
+function showCodePopup(){
+  const popup=document.getElementById("code-popup");
+  const inp=document.getElementById("code-popup-input");
+  const suggs=document.getElementById("code-popup-suggs");
+  popup.style.top=(codePopupData.y)+"px";
+  popup.style.left=Math.min(codePopupData.x,window.innerWidth-250)+"px";
+  const doc=activeDoc();
+  const existingCodes=doc?[...new Set(doc.annotations.filter(a=>a.type==="code").map(a=>a.code))]:[];
+  const catKeys=Object.keys(cats).slice(0,5);
+  const allSuggs=[...new Set([...existingCodes,...catKeys])].slice(0,8);
+  if(allSuggs.length>0){
+    suggs.innerHTML=allSuggs.map(c=>`<span class="code-sugg">${esc(c)}</span>`).join("");
+    suggs.querySelectorAll(".code-sugg").forEach(s=>s.addEventListener("click",()=>{inp.value=s.textContent;inp.focus();}));
+  } else suggs.innerHTML="";
+  inp.value=""; popup.classList.add("visible");
+  setTimeout(()=>inp.focus(),50);
+}
+function hideCodePopup(){document.getElementById("code-popup").classList.remove("visible");codePopupData=null;}
+function confirmCode(){
+  const val=document.getElementById("code-popup-input").value.trim();
+  if(!val||!codePopupData){hideCodePopup();return;}
+  addAnnotation({type:"code",start:codePopupData.start,end:codePopupData.end,text:codePopupData.text,code:val});
+  cats[val.toLowerCase()]=(cats[val.toLowerCase()]||0)+1;
+  persist(); hideCodePopup();
+}
+document.getElementById("code-popup-ok").addEventListener("click",confirmCode);
+document.getElementById("code-popup-cancel").addEventListener("click",hideCodePopup);
+document.getElementById("code-popup-input").addEventListener("keydown",e=>{if(e.key==="Enter") confirmCode();if(e.key==="Escape") hideCodePopup();});
+document.addEventListener("click",e=>{
+  const popup=document.getElementById("code-popup");
+  if(popup.classList.contains("visible")&&!popup.contains(e.target)) hideCodePopup();
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// NUBE
+// ═══════════════════════════════════════════════════════════════════════════
+function renderNubeView(){
+  const entries=Object.entries(cats).sort((a,b)=>b[1]-a[1]);
+  const colors=["#1E3A2F","#2D6A4F","#B85C38","#7B5EA7","#2A5A8C","#6B4423","#3A6A3A","#8C4A2A"];
+  const darkColors=["#3D8A6A","#D4784A","#9B7EC7","#4A7AAC","#9A6433","#5A9A5A","#AC6A3A","#4A8A8A"];
+  const max=entries.length>0?entries[0][1]:1;
+  const total=entries.reduce((s,[,c])=>s+c,0);
+  let inner="";
+  if(entries.length===0){
+    inner=`<div style="text-align:center;padding:3rem 1rem;color:var(--empty);">
+      <div style="font-size:2.2rem;margin-bottom:.5rem;opacity:.3">◈</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--text2);">
+        Las categorías aparecerán aquí<br>cuando codifiques tus notas o documentos
+      </div></div>`;
+  } else {
+    const palette=darkMode?darkColors:colors;
+    const cloud=entries.map(([cat,count],i)=>{
+      const scale=0.75+(count/max)*0.85; const color=palette[i%palette.length];
+      return `<span class="cat-chip" style="font-family:'Cormorant Garamond',serif;font-size:${scale*1.05}rem;font-weight:${count>2?600:400};color:${color};background:${color}18;border:1px solid ${color}35;">
+        ${esc(cat)}<span class="cat-count">×${count}</span>
+      </span>`;
+    }).join("");
+    const bars=entries.slice(0,12).map(([cat,count])=>`
+      <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.38rem;">
+        <div style="font-family:'Lora',serif;font-size:.76rem;color:var(--text);width:150px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(cat)}</div>
+        <div style="flex:1;height:4px;background:var(--border2);border-radius:2px;overflow:hidden;">
+          <div style="height:100%;width:${(count/max)*100}%;background:var(--green-mid);border-radius:2px;transition:width .4s;"></div>
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:.6rem;color:var(--text3);width:20px;text-align:right;">${count}</div>
+      </div>`).join("");
+    inner=`<div style="margin-bottom:1.5rem;display:flex;flex-wrap:wrap;gap:.5rem;line-height:1.6;">${cloud}</div>
+      <div style="border-top:1px solid var(--border2);padding-top:1rem;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin-bottom:.65rem;">Ranking de frecuencia</div>
+        ${bars}
+      </div>
+      <div style="margin-top:1.2rem;display:flex;justify-content:flex-end;">
+        <button class="gbtn outline" style="font-size:.56rem;" id="clear-cats-btn">Limpiar todo</button>
+      </div>`;
+  }
+  document.getElementById("content").innerHTML=`
+    <div class="alt-view">
+      <div class="alt-title">◆ Nube de categorías</div>
+      <div class="alt-sub">${entries.length} categorías · ${total} menciones totales</div>
+      ${inner}
+    </div>`;
+  document.getElementById("clear-cats-btn")?.addEventListener("click",()=>{cats={};persist();showToast("Nube reiniciada");renderNubeView();renderSidebar();});
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// CITAR — Formulario estructurado (sin IA) + parseo opcional con IA
+// ═══════════════════════════════════════════════════════════════════════════
+let citarState = {
+  tab: "estructurado",     // "estructurado" | "pegar"
+  tipo: "libro",
+  autores: "",
+  anio: "",
+  titulo: "",
+  subtitulo: "",
+  editorial: "",
+  lugar: "",
+  edicion: "",
+  revista: "",
+  volumen: "",
+  numero: "",
+  paginas: "",
+  doi: "",
+  url: "",
+  universidad: "",
+  nivelTesis: "doctoral",
+  sitio: "",
+  fechaAcceso: "",
+  capLibro: "",
+  capEditores: "",
+  rawInput: "",
+  output: ""
+};
+
+const CITAR_TIPOS = [
+  { id: "libro",    label: "Libro" },
+  { id: "capitulo", label: "Capítulo de libro" },
+  { id: "articulo", label: "Artículo de revista" },
+  { id: "tesis",    label: "Tesis" },
+  { id: "web",      label: "Página web" },
+  { id: "informe",  label: "Informe / documento" }
+];
+
+// Parser de autores: acepta "Apellido, Nombre; Apellido2, Nombre2" o uno por línea.
+function parseAutores(raw){
+  if(!raw.trim()) return [];
+  const parts = raw.includes(";") || raw.includes("\n")
+    ? raw.split(/[;\n]/).map(s => s.trim()).filter(Boolean)
+    : [raw.trim()];
+  return parts.map(p => {
+    if(p.includes(",")){
+      const [apellido, ...rest] = p.split(",");
+      return { apellido: apellido.trim(), nombre: rest.join(",").trim() };
+    } else {
+      const tokens = p.trim().split(/\s+/);
+      if(tokens.length === 1) return { apellido: tokens[0], nombre: "" };
+      return { apellido: tokens[tokens.length-1], nombre: tokens.slice(0,-1).join(" ") };
+    }
+  });
+}
+
+function inicial(nombre){ return nombre ? nombre.split(/\s+/).map(n => n[0]?.toUpperCase()+".").join(" ") : ""; }
+
+function formatAutoresAPA(autores){
+  if(autores.length === 0) return "[Autor desconocido]";
+  if(autores.length === 1) return `${autores[0].apellido}, ${inicial(autores[0].nombre)}`;
+  if(autores.length === 2) return `${autores[0].apellido}, ${inicial(autores[0].nombre)}, & ${autores[1].apellido}, ${inicial(autores[1].nombre)}`;
+  if(autores.length <= 20){
+    const inits = autores.slice(0,-1).map(a => `${a.apellido}, ${inicial(a.nombre)}`).join(", ");
+    return `${inits}, & ${autores.slice(-1)[0].apellido}, ${inicial(autores.slice(-1)[0].nombre)}`;
+  }
+  // Más de 20: APA 7 acorta.
+  return autores.slice(0,19).map(a => `${a.apellido}, ${inicial(a.nombre)}`).join(", ") + ", ... " + autores.slice(-1)[0].apellido + ", " + inicial(autores.slice(-1)[0].nombre);
+}
+
+function formatAutoresChicago(autores){
+  if(autores.length === 0) return "[Autor desconocido]";
+  if(autores.length === 1) return `${autores[0].apellido}, ${autores[0].nombre}`;
+  // Primer autor invertido, resto natural.
+  const first = `${autores[0].apellido}, ${autores[0].nombre}`;
+  const rest = autores.slice(1).map(a => `${a.nombre} ${a.apellido}`.trim());
+  if(autores.length === 2) return `${first} y ${rest[0]}`;
+  return `${first}, ${rest.slice(0,-1).join(", ")} y ${rest.slice(-1)[0]}`;
+}
+
+function citaTextoAPA(autores, anio){
+  if(autores.length === 0) return `([s.a.], ${anio || "s.f."})`;
+  if(autores.length === 1) return `(${autores[0].apellido}, ${anio || "s.f."})`;
+  if(autores.length === 2) return `(${autores[0].apellido} & ${autores[1].apellido}, ${anio || "s.f."})`;
+  return `(${autores[0].apellido} et al., ${anio || "s.f."})`;
+}
+
+function citaTextoChicago(autores, anio){
+  if(autores.length === 0) return `([s.a.] ${anio || "s.f."})`;
+  if(autores.length === 1) return `(${autores[0].apellido} ${anio || "s.f."})`;
+  if(autores.length === 2) return `(${autores[0].apellido} y ${autores[1].apellido} ${anio || "s.f."})`;
+  return `(${autores[0].apellido} et al. ${anio || "s.f."})`;
+}
+
+// Genera APA 7 y Chicago a partir del estado del formulario.
+function generarCita(){
+  const s = citarState;
+  const autores = parseAutores(s.autores);
+  const anioStr = s.anio || "s.f.";
+  let apa = "", chiAuFe = "", chiNota = "";
+  const tituloFull = s.titulo + (s.subtitulo ? `: ${s.subtitulo}` : "");
+
+  // Helper: ensamblar y devolver objeto.
+  if(s.tipo === "libro"){
+    apa = `${formatAutoresAPA(autores)} (${anioStr}). *${tituloFull}*${s.edicion?` (${s.edicion} ed.)`:""}. ${s.editorial || "[Editorial]"}.${s.doi?` https://doi.org/${s.doi.replace(/^https?:\/\/doi\.org\//,"")}`:""}`;
+    chiAuFe = `${formatAutoresChicago(autores)}. ${anioStr}. *${tituloFull}*. ${s.lugar?s.lugar+": ":""}${s.editorial || "[Editorial]"}.`;
+    const nombres = autores.map(a => `${a.nombre} ${a.apellido}`.trim()).join(", ") || "[Autor desconocido]";
+    chiNota = `${nombres}, *${tituloFull}* (${s.lugar?s.lugar+": ":""}${s.editorial || "[Editorial]"}, ${anioStr})${s.paginas?`, ${s.paginas}`:""}.`;
+  }
+  else if(s.tipo === "capitulo"){
+    apa = `${formatAutoresAPA(autores)} (${anioStr}). ${tituloFull}. En ${s.capEditores || "[Editores]"} (Eds.), *${s.capLibro || "[Título del libro]"}* (pp. ${s.paginas || "[pp.]"}). ${s.editorial || "[Editorial]"}.`;
+    chiAuFe = `${formatAutoresChicago(autores)}. ${anioStr}. "${tituloFull}". En *${s.capLibro || "[Título del libro]"}*, editado por ${s.capEditores || "[Editores]"}, ${s.paginas || "[pp.]"}. ${s.lugar?s.lugar+": ":""}${s.editorial || "[Editorial]"}.`;
+    const nombres = autores.map(a => `${a.nombre} ${a.apellido}`.trim()).join(", ") || "[Autor desconocido]";
+    chiNota = `${nombres}, "${tituloFull}", en *${s.capLibro || "[Título del libro]"}*, ed. ${s.capEditores || "[Editores]"} (${s.lugar?s.lugar+": ":""}${s.editorial || "[Editorial]"}, ${anioStr}), ${s.paginas || "[pp.]"}.`;
+  }
+  else if(s.tipo === "articulo"){
+    apa = `${formatAutoresAPA(autores)} (${anioStr}). ${tituloFull}. *${s.revista || "[Revista]"}*, ${s.volumen || "[vol.]"}${s.numero?`(${s.numero})`:""}, ${s.paginas || "[pp.]"}.${s.doi?` https://doi.org/${s.doi.replace(/^https?:\/\/doi\.org\//,"")}`:""}`;
+    chiAuFe = `${formatAutoresChicago(autores)}. ${anioStr}. "${tituloFull}". *${s.revista || "[Revista]"}* ${s.volumen || "[vol.]"}${s.numero?`, no. ${s.numero}`:""}: ${s.paginas || "[pp.]"}.${s.doi?` https://doi.org/${s.doi.replace(/^https?:\/\/doi\.org\//,"")}.`:""}`;
+    const nombres = autores.map(a => `${a.nombre} ${a.apellido}`.trim()).join(", ") || "[Autor desconocido]";
+    chiNota = `${nombres}, "${tituloFull}", *${s.revista || "[Revista]"}* ${s.volumen || "[vol.]"}${s.numero?`, no. ${s.numero}`:""} (${anioStr}): ${s.paginas || "[pp.]"}.`;
+  }
+  else if(s.tipo === "tesis"){
+    const nivelLabel = s.nivelTesis === "doctoral" ? "Tesis doctoral" : "Tesis de maestría";
+    apa = `${formatAutoresAPA(autores)} (${anioStr}). *${tituloFull}* [${nivelLabel}, ${s.universidad || "[Universidad]"}].`;
+    chiAuFe = `${formatAutoresChicago(autores)}. ${anioStr}. "${tituloFull}". ${nivelLabel}, ${s.universidad || "[Universidad]"}.`;
+    const nombres = autores.map(a => `${a.nombre} ${a.apellido}`.trim()).join(", ") || "[Autor desconocido]";
+    chiNota = `${nombres}, "${tituloFull}" (${nivelLabel}, ${s.universidad || "[Universidad]"}, ${anioStr}).`;
+  }
+  else if(s.tipo === "web"){
+    apa = `${formatAutoresAPA(autores)} (${anioStr}). ${tituloFull}. *${s.sitio || "[Sitio web]"}*. ${s.url || "[URL]"}`;
+    chiAuFe = `${formatAutoresChicago(autores)}. ${anioStr}. "${tituloFull}". *${s.sitio || "[Sitio web]"}*. ${s.fechaAcceso?`Consultado el ${s.fechaAcceso}. `:""}${s.url || "[URL]"}.`;
+    const nombres = autores.map(a => `${a.nombre} ${a.apellido}`.trim()).join(", ") || "[Autor desconocido]";
+    chiNota = `${nombres}, "${tituloFull}", *${s.sitio || "[Sitio web]"}*, ${anioStr}, ${s.url || "[URL]"}.`;
+  }
+  else if(s.tipo === "informe"){
+    apa = `${formatAutoresAPA(autores)} (${anioStr}). *${tituloFull}*. ${s.editorial || "[Institución]"}.${s.url?` ${s.url}`:""}`;
+    chiAuFe = `${formatAutoresChicago(autores)}. ${anioStr}. *${tituloFull}*. ${s.lugar?s.lugar+": ":""}${s.editorial || "[Institución]"}.${s.url?` ${s.url}.`:""}`;
+    const nombres = autores.map(a => `${a.nombre} ${a.apellido}`.trim()).join(", ") || "[Autor desconocido]";
+    chiNota = `${nombres}, *${tituloFull}* (${s.lugar?s.lugar+": ":""}${s.editorial || "[Institución]"}, ${anioStr})${s.paginas?`, ${s.paginas}`:""}.`;
+  }
+
+  const apaCita = citaTextoAPA(autores, s.anio);
+  const chiCita = citaTextoChicago(autores, s.anio);
+
+  return `**APA 7ª edición**\n${apa}\n\nCita en el texto: ${apaCita}\n\n**Chicago 17ª ed. — Autor-Fecha**\n${chiAuFe}\n\nCita en el texto: ${chiCita}\n\n**Chicago — Nota al pie (primera mención)**\n${chiNota}`;
+}
+
+function renderCitarView(){
+  const m = MODES.citar;
+  const aiOn = hasKey();
+  const s = citarState;
+
+  // Campos del formulario según el tipo.
+  function field(label, id, placeholder = "", type = "text", value = ""){
+    const v = value || s[id] || "";
+    return `<div class="cf-row">
+      <label class="cf-label">${label}</label>
+      <input class="cf-input" type="${type}" id="cf-${id}" data-field="${id}" placeholder="${placeholder}" value="${esc(v)}"/>
+    </div>`;
+  }
+  function textarea(label, id, placeholder = ""){
+    return `<div class="cf-row">
+      <label class="cf-label">${label}</label>
+      <textarea class="cf-input cf-ta" id="cf-${id}" data-field="${id}" rows="2" placeholder="${placeholder}">${esc(s[id]||"")}</textarea>
+    </div>`;
+  }
+
+  let camposEspecificos = "";
+  if(s.tipo === "libro"){
+    camposEspecificos = field("Editorial", "editorial", "Ej: Siglo XXI")
+      + field("Lugar de edición", "lugar", "Ej: Buenos Aires")
+      + field("Edición (opcional)", "edicion", "Ej: 2")
+      + field("DOI (opcional)", "doi", "10.xxxx/xxxx");
+  } else if(s.tipo === "capitulo"){
+    camposEspecificos = field("Título del libro contenedor", "capLibro", "")
+      + field("Editores/as del libro", "capEditores", "Ej: J. Pérez & M. Gómez")
+      + field("Editorial", "editorial", "")
+      + field("Lugar", "lugar", "")
+      + field("Páginas del capítulo", "paginas", "Ej: 45-78");
+  } else if(s.tipo === "articulo"){
+    camposEspecificos = field("Revista", "revista", "")
+      + field("Volumen", "volumen", "")
+      + field("Número (opcional)", "numero", "")
+      + field("Páginas", "paginas", "Ej: 12-34")
+      + field("DOI (opcional)", "doi", "");
+  } else if(s.tipo === "tesis"){
+    camposEspecificos = `<div class="cf-row">
+        <label class="cf-label">Nivel</label>
+        <select class="cf-input" id="cf-nivelTesis" data-field="nivelTesis">
+          <option value="doctoral" ${s.nivelTesis==="doctoral"?"selected":""}>Doctoral</option>
+          <option value="maestria" ${s.nivelTesis==="maestria"?"selected":""}>Maestría</option>
+        </select>
+      </div>`
+      + field("Universidad / institución", "universidad", "");
+  } else if(s.tipo === "web"){
+    camposEspecificos = field("Sitio web", "sitio", "Ej: La Vaca, Anfibia")
+      + field("URL", "url", "https://…")
+      + field("Fecha de acceso (opcional)", "fechaAcceso", "DD/MM/AAAA");
+  } else if(s.tipo === "informe"){
+    camposEspecificos = field("Institución", "editorial", "Ej: CONICET, FAO")
+      + field("Lugar", "lugar", "")
+      + field("URL (opcional)", "url", "")
+      + field("Páginas (opcional)", "paginas", "");
+  }
+
+  const tabsHtml = `
+    <div class="citar-tabs">
+      <button class="citar-tab${s.tab==="estructurado"?" active":""}" data-citab="estructurado">Datos estructurados <span class="ct-badge">sin IA</span></button>
+      <button class="citar-tab${s.tab==="pegar"?" active":""}${!aiOn?" disabled":""}" data-citab="pegar" ${!aiOn?"title='Requiere clave de Gemini'":""}>Pegar desordenado <span class="ct-badge${aiOn?"":" off"}">${aiOn?"con IA":"requiere IA"}</span></button>
+    </div>`;
+
+  let body = "";
+  if(s.tab === "estructurado"){
+    const tipoOpts = CITAR_TIPOS.map(t => `<option value="${t.id}" ${s.tipo===t.id?"selected":""}>${t.label}</option>`).join("");
+    body = `
+      <div class="citar-form">
+        <div class="cf-row">
+          <label class="cf-label">Tipo de fuente</label>
+          <select class="cf-input" id="cf-tipo" data-field="tipo">${tipoOpts}</select>
+        </div>
+        ${textarea("Autores/as (uno por línea, formato 'Apellido, Nombre')", "autores", "Ej:\nGarcía Canclini, Néstor\nSegato, Rita")}
+        ${field("Año", "anio", "Ej: 2019")}
+        ${field("Título", "titulo", "")}
+        ${field("Subtítulo (opcional)", "subtitulo", "")}
+        ${camposEspecificos}
+        <div class="cf-actions">
+          <button class="gbtn green" id="citar-generate">${m.symbol} Generar referencia</button>
+          <button class="gbtn outline" id="citar-clear">Limpiar</button>
+        </div>
+      </div>`;
+  } else {
+    body = `
+      <div class="citar-paste">
+        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--text2);margin-bottom:.5rem;font-size:.85rem;">
+          Pegá los datos como los tengas, aunque estén desordenados. La IA va a interpretarlos y devolver las referencias formateadas.
+        </div>
+        <textarea class="cf-input cf-ta" id="citar-raw" rows="6" placeholder="${m.placeholder.replace(/\n/g,"&#10;")}">${esc(s.rawInput)}</textarea>
+        <div class="cf-actions">
+          <button class="gbtn green" id="citar-ai-go" ${!aiOn?"disabled":""}>${m.symbol} Formatear con IA</button>
+        </div>
+      </div>`;
+  }
+
+  const outHtml = s.output
+    ? `<div class="citar-out">
+        <div class="out-head">
+          <span class="out-label">Referencias</span>
+          <button class="copy-btn" id="citar-copy">◎ Copiar</button>
+        </div>
+        <div class="out-card"><div id="md-citar">${renderMd(s.output)}</div></div>
+      </div>`
+    : `<div class="citar-out"><div class="out-head"><span class="out-label">Referencias</span></div>
+        <div class="out-card out-empty"><div style="text-align:center;color:var(--empty);">
+          <div style="font-size:1.8rem;margin-bottom:.4rem;opacity:.3">${m.symbol}</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:var(--text2);">Las referencias formateadas<br>aparecerán aquí</div>
+        </div></div></div>`;
+
+  document.getElementById("content").innerHTML = `
+    <div class="tool-view">
+      <div class="input-zone">
+        <div class="zone-head">
+          <div class="zone-title"><span style="color:${m.color}">${m.symbol}</span> ${m.label} <em>/ ${m.sub}</em></div>
+          <span class="zone-hint">APA 7 · Chicago 17</span>
+        </div>
+        ${tabsHtml}
+        ${body}
+      </div>
+      ${outHtml}
+    </div>`;
+
+  // Bindings
+  document.querySelectorAll(".citar-tab").forEach(t => {
+    t.addEventListener("click", () => {
+      if(t.classList.contains("disabled")) {
+        showToast("Configurá Gemini en ⚙ Configuración para usar este modo");
+        return;
+      }
+      s.tab = t.dataset.citab;
+      renderCitarView();
+    });
+  });
+  document.querySelectorAll("[data-field]").forEach(inp => {
+    inp.addEventListener("input", e => {
+      const f = e.target.dataset.field;
+      s[f] = e.target.value;
+      if(f === "tipo") renderCitarView();
+    });
+  });
+  document.getElementById("citar-generate")?.addEventListener("click", () => {
+    if(!s.titulo.trim() && !s.autores.trim()){
+      showToast("Mínimo necesitás autor/es o título");
+      return;
+    }
+    s.output = generarCita();
+    renderCitarView();
+  });
+  document.getElementById("citar-clear")?.addEventListener("click", () => {
+    citarState = { ...citarState, autores:"",anio:"",titulo:"",subtitulo:"",editorial:"",lugar:"",edicion:"",revista:"",volumen:"",numero:"",paginas:"",doi:"",url:"",universidad:"",sitio:"",fechaAcceso:"",capLibro:"",capEditores:"",output:"" };
+    renderCitarView();
+  });
+  document.getElementById("citar-raw")?.addEventListener("input", e => { s.rawInput = e.target.value; });
+  document.getElementById("citar-ai-go")?.addEventListener("click", async () => {
+    if(!s.rawInput.trim()) return;
+    if(!hasKey()){ mode="config"; render(); return; }
+    const btn = document.getElementById("citar-ai-go");
+    btn.disabled = true; btn.innerHTML = '<span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span> Procesando…';
+    try {
+      const res = await callGemini(MODES.citar.system, s.rawInput.trim(), { maxTokens: 2000 });
+      s.output = res;
+      renderCitarView();
+    } catch(e) {
+      const d = e._diag || { title:"Error", detail:"" };
+      showToast(d.title.replace(/⚠ /, ""));
+      btn.disabled = false; btn.innerHTML = `${MODES.citar.symbol} Formatear con IA`;
+    }
+  });
+  document.getElementById("citar-copy")?.addEventListener("click", () => {
+    navigator.clipboard.writeText(s.output);
+    showToast("Copiado ✓");
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// CONFIG VIEW
+// ═══════════════════════════════════════════════════════════════════════════
+function renderConfigView(){
+  const currentKey = getKey();
+  const masked = currentKey ? currentKey.slice(0,6) + "…" + currentKey.slice(-4) : "";
+  const currentModel = getModel();
+  const modelOpts = MODEL_OPTIONS.map(m =>
+    `<label class="cfg-radio">
+      <input type="radio" name="cfg-model" value="${m.id}" ${currentModel===m.id?"checked":""}/>
+      <div><div class="cfg-radio-label">${m.label}</div><div class="cfg-radio-desc">${m.desc}</div></div>
+    </label>`
+  ).join("");
+
+  document.getElementById("content").innerHTML = `
+    <div class="alt-view cfg-view">
+      <div class="alt-title">⚙ Configuración</div>
+      <div class="alt-sub">Clave de IA, datos guardados, ayuda</div>
+
+      <div class="cfg-section">
+        <div class="cfg-sec-title">◈ Inteligencia artificial (opcional)</div>
+        <div class="cfg-sec-desc">
+          Para activar los modos <strong>Codificar</strong>, <strong>Analizar</strong> y <strong>Recomendar</strong> necesitás una clave gratuita de Google Gemini. Sin clave, el resto de la app funciona normalmente.
+        </div>
+        ${currentKey ? `<div class="cfg-key-status ok">✓ Clave activa: <code>${masked}</code></div>` : `<div class="cfg-key-status off">○ Sin clave configurada · IA desactivada</div>`}
+        <div class="cf-row">
+          <label class="cf-label">Pegá tu clave de Gemini</label>
+          <input class="cf-input" type="password" id="cfg-key-input" placeholder="AIza..." value="${esc(currentKey)}"/>
+        </div>
+        <div class="cfg-actions">
+          <button class="gbtn green" id="cfg-save-key">${currentKey ? "Actualizar" : "Guardar"} clave</button>
+          ${currentKey ? `<button class="gbtn outline" id="cfg-test-key">Probar conexión</button>` : ""}
+          ${currentKey ? `<button class="gbtn danger" id="cfg-clear-key">Eliminar clave</button>` : ""}
+          <button class="gbtn outline" id="cfg-show-guide">¿Cómo conseguir una?</button>
+        </div>
+        <div id="cfg-test-result"></div>
+
+        <div class="cfg-sec-title" style="margin-top:1.4rem;">Modelo de Gemini</div>
+        <div class="cfg-sec-desc">Más capacidad = menos consultas gratis por día. Para investigación etnográfica el modelo recomendado anda muy bien.</div>
+        <div class="cfg-models">${modelOpts}</div>
+      </div>
+
+      <div class="cfg-section">
+        <div class="cfg-sec-title">⬇ Respaldo de tus datos</div>
+        <div class="cfg-sec-desc">
+          Tu trabajo se guarda solo en este navegador. Si cambiás de computadora o limpiás el caché, lo perdés.
+          Por eso te recomendamos exportar de vez en cuando — bajás un archivo que después podés volver a subir.
+        </div>
+        <div class="cfg-actions">
+          <button class="gbtn green" id="cfg-export">⬇ Exportar todo a archivo</button>
+          <button class="gbtn outline" id="cfg-import">⬆ Importar desde archivo</button>
+          <input type="file" id="cfg-import-input" accept=".json" style="display:none"/>
+        </div>
+        <div class="cfg-data-stats">
+          <span class="cfg-stat">${notes.length} nota${notes.length!==1?"s":""}</span>
+          <span class="cfg-stat">${docs.length} documento${docs.length!==1?"s":""}</span>
+          <span class="cfg-stat">${Object.keys(cats).length} categoría${Object.keys(cats).length!==1?"s":""}</span>
+          <span class="cfg-stat">${catTotal()} mencion${catTotal()!==1?"es":""} totales</span>
+        </div>
+      </div>
+
+      <div class="cfg-section danger">
+        <div class="cfg-sec-title">⚠ Borrar datos</div>
+        <div class="cfg-sec-desc">Borra todo lo de este navegador (notas, documentos, categorías, historial). No se puede deshacer. Antes de hacerlo, conviene exportar.</div>
+        <div class="cfg-actions">
+          <button class="gbtn danger" id="cfg-wipe">Borrar todo de este navegador</button>
+        </div>
+      </div>
+
+      <div class="cfg-section">
+        <div class="cfg-sec-title">ℹ Acerca de</div>
+        <div class="cfg-sec-desc" style="font-size:.78rem;line-height:1.6;">
+          Cuaderno Etnográfico v7 (híbrido). Funciona en cualquier navegador moderno.
+          Tu trabajo y tu clave de IA quedan solo en este navegador (localStorage); nada se envía a servidores externos, salvo las consultas que vos explícitamente le hagas a Google Gemini cuando uses los modos con IA.
+          El texto de los PDFs se extrae localmente con pdf.js (de Mozilla), sin enviar el archivo a ningún lado.
+        </div>
+      </div>
+    </div>`;
+
+  // Bindings
+  document.getElementById("cfg-save-key").addEventListener("click", () => {
+    const v = document.getElementById("cfg-key-input").value.trim();
+    if(!v){ showToast("Pegá la clave primero"); return; }
+    if(!v.startsWith("AIza")){
+      showToast("Una clave de Gemini suele empezar con 'AIza'. Verificá que sea la correcta.");
+    }
+    setKey(v);
+    showToast("Clave guardada ✓");
+    renderConfigView(); renderSidebar(); updateStatus();
+  });
+  document.getElementById("cfg-test-key")?.addEventListener("click", async () => {
+    const out = document.getElementById("cfg-test-result");
+    out.innerHTML = `<div class="cfg-test-loading">Probando conexión con Gemini…</div>`;
+    const result = await testGeminiConnection();
+    if(result.ok){
+      out.innerHTML = `<div class="cfg-test-ok">✓ Conexión OK. Respuesta de prueba: "${esc(result.sample.trim())}"</div>`;
+    } else {
+      out.innerHTML = `<div class="cfg-test-err">
+        <div class="cfg-test-err-title">${esc(result.diag.title)}</div>
+        <div class="cfg-test-err-detail">${esc(result.diag.detail)}</div>
+      </div>`;
+    }
+  });
+  document.getElementById("cfg-clear-key")?.addEventListener("click", () => {
+    if(!confirm("¿Eliminar la clave de Gemini de este navegador?")) return;
+    setKey("");
+    showToast("Clave eliminada");
+    renderConfigView(); renderSidebar(); updateStatus();
+  });
+  document.getElementById("cfg-show-guide").addEventListener("click", () => {
+    showGuide = true; renderGuideModal();
+  });
+  document.querySelectorAll('input[name="cfg-model"]').forEach(r => {
+    r.addEventListener("change", () => {
+      setModel(r.value);
+      showToast("Modelo cambiado a " + (MODEL_OPTIONS.find(m=>m.id===r.value)?.label));
+    });
+  });
+  document.getElementById("cfg-export").addEventListener("click", exportAll);
+  document.getElementById("cfg-import").addEventListener("click", () => {
+    document.getElementById("cfg-import-input").click();
+  });
+  document.getElementById("cfg-import-input").addEventListener("change", e => importAll(e.target.files[0]));
+  document.getElementById("cfg-wipe").addEventListener("click", () => {
+    if(!confirm("Esto borra TODO de este navegador (notas, documentos, categorías, historial, clave). ¿Seguir?")) return;
+    if(!confirm("Última confirmación: ¿borrar todo?")) return;
+    Object.values(SK).forEach(stRemove);
+    cats={}; docs=[]; notes=[]; history=[];
+    project={tema:"",objetivos:"",enfoque:"",campo:"",preguntas:""};
+    materials=[]; savedCodes=[]; savedAnalyses=[];
+    showToast("Todo borrado");
+    setTimeout(()=>location.reload(), 500);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// EXPORT / IMPORT
+// ═══════════════════════════════════════════════════════════════════════════
+function exportAll(){
+  const payload = {
+    _version: 8,
+    _exportedAt: new Date().toISOString(),
+    cats, docs, notes, history,
+    project, materials, savedCodes, savedAnalyses,
+    model: getModel()
+    // NO incluimos la clave de Gemini en el export por seguridad.
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const ts = new Date().toISOString().slice(0,19).replace(/[:T]/g,"-");
+  a.href = url; a.download = `cuaderno-etnografico-${ts}.json`; a.click();
+  URL.revokeObjectURL(url);
+  showToast("Respaldo descargado ✓");
+}
+
+async function importAll(file){
+  if(!file) return;
+  try {
+    const text = await file.text();
+    const data = JSON.parse(text);
+    if(!data._version){ showToast("Archivo no reconocido"); return; }
+    if(!confirm("Esto va a REEMPLAZAR todo lo que tenés en este navegador con el contenido del archivo. ¿Seguir?")) return;
+    if(data.cats) cats = data.cats;
+    if(data.docs) docs = data.docs;
+    if(data.notes) notes = data.notes;
+    if(data.history) history = data.history;
+    if(data.project) project = {...project, ...data.project};
+    if(data.materials) materials = data.materials;
+    if(data.savedCodes) savedCodes = data.savedCodes;
+    if(data.savedAnalyses) savedAnalyses = data.savedAnalyses;
+    if(data.model) setModel(data.model);
+    persist();
+    showToast("Datos restaurados ✓");
+    renderConfigView(); renderSidebar();
+  } catch(e) {
+    showToast("Error al leer el archivo: " + e.message);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// GUIDE MODAL — Cómo conseguir una clave de Gemini
+// ═══════════════════════════════════════════════════════════════════════════
+function renderGuideModal(){
+  // Inserta o muestra el modal de guía.
+  let modal = document.getElementById("guide-modal");
+  if(!modal){
+    modal = document.createElement("div");
+    modal.id = "guide-modal";
+    modal.className = "guide-modal";
+    document.body.appendChild(modal);
+  }
+  modal.innerHTML = `
+    <div class="guide-backdrop" id="guide-backdrop"></div>
+    <div class="guide-box">
+      <div class="guide-head">
+        <div class="guide-title">Cómo conseguir tu clave gratis de Gemini</div>
+        <button class="guide-close" id="guide-close">✕</button>
+      </div>
+      <div class="guide-body">
+        <div class="guide-intro">
+          Toma <strong>5 minutos</strong>. No necesitás tarjeta de crédito ni saldo. Cualquier cuenta de Google sirve (la del laburo, la personal, la de la facultad).
+        </div>
+
+        <div class="guide-step">
+          <div class="guide-step-n">1</div>
+          <div class="guide-step-body">
+            <div class="guide-step-title">Entrá a Google AI Studio</div>
+            <div class="guide-step-text">
+              Andá a <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>.
+              Te va a pedir que inicies sesión con una cuenta de Google. Usá una donde tengas tu fecha de nacimiento confirmada (debe ser mayor de 18).
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-step">
+          <div class="guide-step-n">2</div>
+          <div class="guide-step-body">
+            <div class="guide-step-title">Aceptá los términos</div>
+            <div class="guide-step-text">
+              La primera vez te va a pedir aceptar los términos de servicio. Hacé clic en aceptar. Si te dice que la API no está disponible en tu región, fijate si tenés activa una VPN: a veces detecta una ubicación incorrecta. Desactivala y volvé a entrar.
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-step">
+          <div class="guide-step-n">3</div>
+          <div class="guide-step-body">
+            <div class="guide-step-title">Hacé clic en "Crear clave de API"</div>
+            <div class="guide-step-text">
+              Aparece un botón "Create API key" (o "Crear clave de API"). Hacé clic. Te va a preguntar en qué proyecto crearla — si nunca usaste Google Cloud, te crea uno automáticamente. Aceptá y dale a generar.
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-step">
+          <div class="guide-step-n">4</div>
+          <div class="guide-step-body">
+            <div class="guide-step-title">Copiá la clave</div>
+            <div class="guide-step-text">
+              Te va a mostrar una cadena larga que empieza con <code>AIza...</code>. Copiala entera. <strong>Esa es tu clave</strong>. Cuidala como una contraseña: con esa clave alguien podría hacer consultas en tu nombre.
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-step">
+          <div class="guide-step-n">5</div>
+          <div class="guide-step-body">
+            <div class="guide-step-title">Pegala acá en Configuración</div>
+            <div class="guide-step-text">
+              Volvé a esta app, andá a la pestaña <strong>Configuración</strong>, pegá la clave en el campo correspondiente y hacé clic en "Guardar". Después podés tocar "Probar conexión" para verificar que funciona.
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-troubleshooting">
+          <div class="guide-tr-title">Si algo falla:</div>
+          <ul class="guide-tr-list">
+            <li><strong>"API key not valid"</strong>: la copiaste mal o la borraste sin querer. Generá una nueva.</li>
+            <li><strong>"Permission denied" o "403"</strong>: revisá que la cuenta de Google tenga tu edad confirmada (Google pide 18+ verificados). Andá a tu cuenta de Google → Información personal → Fecha de nacimiento.</li>
+            <li><strong>"Region not supported"</strong>: probablemente tenés una VPN o proxy. Desactivalo. Argentina, México, Chile, Colombia, España y la mayoría de países hispanohablantes están soportados.</li>
+            <li><strong>"Quota exceeded" / "429"</strong>: superaste el cupo gratis del día. Esperá hasta mañana o cambiá a un modelo con más cupo (Flash-Lite tiene 1.000 consultas/día).</li>
+            <li><strong>Confusión con cuenta Google</strong>: Gemini chat (gemini.google.com) y la API son cosas distintas. Para esta app necesitás la API key de aistudio.google.com.</li>
+          </ul>
+        </div>
+
+        <div class="guide-footer">
+          <button class="gbtn green" id="guide-go-config">Ir a Configuración para pegar la clave</button>
+          <button class="gbtn outline" id="guide-close2">Cerrar</button>
+        </div>
+      </div>
+    </div>`;
+  modal.style.display = "flex";
+  const close = () => { modal.style.display = "none"; showGuide = false; };
+  document.getElementById("guide-close").addEventListener("click", close);
+  document.getElementById("guide-close2").addEventListener("click", close);
+  document.getElementById("guide-backdrop").addEventListener("click", close);
+  document.getElementById("guide-go-config").addEventListener("click", () => {
+    close(); mode = "config"; render();
+  });
+}
+
+
+
+// ═══════════════════════════════════════════════════════════════════════════
+// MAIN RENDER
+// ═══════════════════════════════════════════════════════════════════════════
+
+// ───────────────────────────────────────────────────────────────────────────
+// MATERIALES (notas de campo / entrevistas / documentos)
+// ───────────────────────────────────────────────────────────────────────────
+function materialsOfType(type){ return materials.filter(m=>m.type===type); }
+
+function renderMaterialsView(type){
+  const t = MATERIAL_TYPES[type];
+  const list = materialsOfType(type);
+  const accept = ".txt,.md,.csv,.pdf,.docx";
+  document.getElementById("content").innerHTML=`
+    <div class="alt-view">
+      <div class="alt-title">${t.sym} ${t.name}</div>
+      <div class="alt-sub">${t.sub} · TXT · MD · PDF · DOCX (texto extraído localmente, sin enviar a la nube)</div>
+      ${backupBannerHtml()}
+      <div class="upload-zone" id="upload-zone">
+        <input type="file" id="mat-file-input" accept="${accept}" multiple style="display:none"/>
+        <div style="font-size:1.6rem;margin-bottom:.5rem;opacity:.3">${t.sym}</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:300;color:var(--text2);margin-bottom:.22rem;">
+          Arrastrá archivos o hacé clic para cargar
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text4);">
+          ${t.name} · TXT · MD · PDF · DOCX
+        </div>
+      </div>
+      <div id="mat-list">
+        ${list.length===0
+          ?`<div style="text-align:center;padding:1.5rem;color:var(--empty);font-family:'Cormorant Garamond',serif;font-style:italic;">Aún no cargaste material en esta sección</div>`
+          :list.map(m=>`
+            <div class="mat-card">
+              <div style="overflow:hidden;">
+                <div class="mat-card-name">${esc(m.name)}</div>
+                <div class="mat-card-meta">${m.text.length} caracteres · ${m.date}</div>
+              </div>
+              <div style="display:flex;gap:.38rem;flex-shrink:0;">
+                <button class="dtb outline" data-view-mat="${m.id}">→ Ver</button>
+                <button class="dtb danger" data-del-mat="${m.id}">✕</button>
+              </div>
+            </div>`).join("")}
+      </div>
+    </div>`;
+
+  const uz=document.getElementById("upload-zone");
+  const fi=document.getElementById("mat-file-input");
+  uz.addEventListener("click",()=>fi.click());
+  fi.addEventListener("change",e=>handleMaterialUpload([...e.target.files], type));
+  uz.addEventListener("dragover",e=>{e.preventDefault();uz.classList.add("drag");});
+  uz.addEventListener("dragleave",()=>uz.classList.remove("drag"));
+  uz.addEventListener("drop",e=>{e.preventDefault();uz.classList.remove("drag");handleMaterialUpload([...e.dataTransfer.files], type);});
+  document.querySelectorAll("[data-view-mat]").forEach(btn=>{
+    btn.addEventListener("click",()=>viewMaterial(btn.dataset.viewMat));
+  });
+  document.querySelectorAll("[data-del-mat]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      materials=materials.filter(m=>m.id!==btn.dataset.delMat);
+      persist(); showToast("Material eliminado"); renderMaterialsView(type); renderSidebar();
+    });
+  });
+  bindBackupBanner();
+}
+
+async function handleMaterialUpload(files, type){
+  for(const file of files){
+    let text="";
+    try{
+      text = await readMaterialFile(file);
+    }catch(e){
+      showToast(e.message || "Error al procesar el archivo");
+      continue;
+    }
+    if(!text){ showToast("No se pudo extraer texto"); continue; }
+    const m={id:"mat_"+Date.now()+"_"+Math.random().toString(36).slice(2),
+      type, name:file.name, text,
+      date:new Date().toLocaleDateString("es-AR",{day:"2-digit",month:"2-digit",year:"2-digit"})};
+    materials=[...materials, m]; persist();
+    showToast(`"${file.name}" cargado ✓`);
+  }
+  renderMaterialsView(type); renderSidebar();
+}
+
+// Visor simple de un material (solo lectura).
+function viewMaterial(id){
+  const m = materials.find(x=>x.id===id); if(!m) return;
+  const t = MATERIAL_TYPES[m.type];
+  document.getElementById("content").innerHTML=`
+    <div class="doc-view" style="grid-template-columns:1fr;">
+      <div class="doc-reader">
+        <div class="doc-toolbar">
+          <button class="dtb outline" id="mat-back">← Volver</button>
+          <div class="doc-toolbar-title">${t.sym} ${esc(m.name)}</div>
+          <button class="dtb outline" id="mat-to-cod">◈ Codificar esto</button>
+          <button class="dtb outline" id="mat-to-ana">◉ Analizar esto</button>
+        </div>
+        <div class="doc-body" spellcheck="false">${esc(m.text).split(/\n\n+/).map(p=>`<p>${p.replace(/\n/g,"<br>")}</p>`).join("")}</div>
+      </div>
+    </div>`;
+  document.getElementById("mat-back").addEventListener("click",()=>{mode=m.type;render();});
+  document.getElementById("mat-to-cod").addEventListener("click",()=>{
+    mode="codificar"; workMode.codificar={src:"archivo",matId:m.id,text:m.text};
+    workSugg.codificar=""; workSuggCodes.codificar=[]; workDraftCodes=[]; workDraftMemo=""; render();
+  });
+  document.getElementById("mat-to-ana").addEventListener("click",()=>{
+    mode="analizar"; workMode.analizar={src:"archivo",matId:m.id,text:m.text};
+    workSugg.analizar=""; workDraftAnaTitle=""; workDraftAnaBody=""; render();
+  });
+}
+
+// ───────────────────────────────────────────────────────────────────────────
+// BACKUP BANNER (recordatorio de respaldo)
+// ───────────────────────────────────────────────────────────────────────────
+function backupBannerHtml(){
+  const total = materials.length + savedCodes.length + savedAnalyses.length + notes.length;
+  if(total < 3) return "";
+  return `<div class="backup-banner">
+    <div class="backup-banner-text">Tu trabajo se guarda <strong>solo en este navegador</strong>. Para no perderlo, descargá un respaldo de vez en cuando.</div>
+    <button class="gbtn green" id="backup-now" style="font-size:.56rem;">⬇ Descargar respaldo</button>
+  </div>`;
+}
+function bindBackupBanner(){
+  document.getElementById("backup-now")?.addEventListener("click", exportAll);
+}
+
+// ───────────────────────────────────────────────────────────────────────────
+// CODIFICAR / ANALIZAR v8 — entrada (fragmento|archivo) + IA + espacio propio
+// ───────────────────────────────────────────────────────────────────────────
+
+// Texto efectivo de entrada según el modo de fuente elegido.
+function workInputText(modeKey){
+  const w = workMode[modeKey];
+  if(w.src==="archivo"){
+    const m = materials.find(x=>x.id===w.matId);
+    return m ? m.text : "";
+  }
+  return w.text || "";
+}
+function workSourceName(modeKey){
+  const w = workMode[modeKey];
+  if(w.src==="archivo"){
+    const m = materials.find(x=>x.id===w.matId);
+    return m ? m.name : "(material no encontrado)";
+  }
+  return "Fragmento pegado";
+}
+
+// Render del selector de fuente (fragmento | archivo).
+function srcSelectorHtml(modeKey){
+  const w = workMode[modeKey];
+  const allMats = materials;
+  const opts = allMats.map(m=>`<option value="${m.id}" ${w.matId===m.id?"selected":""}>${esc(MATERIAL_TYPES[m.type].tag)} · ${esc(m.name)}</option>`).join("");
+  return `
+    <div class="src-tabs">
+      <div class="src-tab ${w.src==="fragmento"?"active":""}" data-src="fragmento" data-mode="${modeKey}">Fragmento</div>
+      <div class="src-tab ${w.src==="archivo"?"active":""}" data-src="archivo" data-mode="${modeKey}">Archivo / material</div>
+    </div>
+    ${w.src==="fragmento"
+      ? `<textarea class="work-input" id="work-frag-${modeKey}" placeholder="Pegá aquí el texto que querés trabajar…">${esc(w.text||"")}</textarea>`
+      : `<select class="src-pick" id="work-mat-${modeKey}">
+          <option value="">— Elegí un material cargado —</option>
+          ${opts}
+        </select>
+        <div style="display:flex;gap:.4rem;align-items:center;flex-wrap:wrap;margin-bottom:.4rem;">
+          <input type="file" id="work-upload-${modeKey}" accept=".txt,.md,.csv,.pdf,.docx" style="display:none"/>
+          <button class="gbtn outline" id="work-upload-btn-${modeKey}" style="font-size:.56rem;">⬆ Subir uno nuevo</button>
+          ${w.matId?`<span style="font-family:'IBM Plex Mono',monospace;font-size:.56rem;color:var(--text3);">${esc(workSourceName(modeKey))}</span>`:""}
+        </div>`
+    }`;
+}
+
+function bindSrcSelector(modeKey, onChange){
+  document.querySelectorAll(`.src-tab[data-mode="${modeKey}"]`).forEach(tab=>{
+    tab.addEventListener("click",()=>{
+      workMode[modeKey].src = tab.dataset.src;
+      onChange();
+    });
+  });
+  const frag = document.getElementById(`work-frag-${modeKey}`);
+  if(frag) frag.addEventListener("input",()=>{ workMode[modeKey].text = frag.value; });
+  const pick = document.getElementById(`work-mat-${modeKey}`);
+  if(pick) pick.addEventListener("change",()=>{ workMode[modeKey].matId = pick.value; onChange(); });
+  const upBtn = document.getElementById(`work-upload-btn-${modeKey}`);
+  const upInp = document.getElementById(`work-upload-${modeKey}`);
+  if(upBtn && upInp){
+    upBtn.addEventListener("click",()=>upInp.click());
+    upInp.addEventListener("change", async e=>{
+      const file = e.target.files[0]; if(!file) return;
+      let text="";
+      try{ text = await readMaterialFile(file); }
+      catch(err){ showToast(err.message||"Error al leer el archivo"); return; }
+      if(!text){ showToast("No se pudo extraer texto"); return; }
+      // Se guarda como documento por defecto (material de referencia).
+      const m={id:"mat_"+Date.now()+"_"+Math.random().toString(36).slice(2),
+        type:"documentos", name:file.name, text,
+        date:new Date().toLocaleDateString("es-AR",{day:"2-digit",month:"2-digit",year:"2-digit"})};
+      materials=[...materials,m]; persist();
+      workMode[modeKey].matId = m.id;
+      showToast(`"${file.name}" cargado ✓`);
+      onChange(); renderSidebar();
+    });
+  }
+}
+
+// Códigos guardados relevantes (coincidencia simple por palabra del texto).
+function relevantSavedCodes(text){
+  if(!text) return [];
+  const low = text.toLowerCase();
+  return [...new Set(savedCodes.map(c=>c.code))]
+    .filter(code => low.includes(code.toLowerCase()))
+    .slice(0,8);
+}
+
+// ── CODIFICAR ──
+function renderCodificarView(){
+  const aiAvail = aiEnabled();
+  const inputText = workInputText("codificar");
+  const relevant = relevantSavedCodes(inputText);
+  const myCodesHtml = workDraftCodes.map(c=>`<span class="usercode-chip">${esc(c)} <span class="uc-x" data-rm-draft="${esc(c)}">✕</span></span>`).join("");
+
+  const aiPanel = aiAvail ? `
+    <div class="ai-panel ai-only">
+      <div class="ai-panel-head">
+        <span class="ai-panel-sym">◈</span>
+        <span class="ai-panel-title">Sugerencias de la IA</span>
+        <span class="ai-panel-tag">no vinculante</span>
+      </div>
+      <button class="ai-panel-run" id="cod-ai-run" ${inputText.trim()?"":"disabled"}>
+        ${loading?'<span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span> Pensando…':'◈ Pedir sugerencias'}
+      </button>
+      <div class="ai-panel-body" id="cod-ai-body">
+        ${workSuggCodes.codificar.length ? `<div class="work-label" style="margin-top:0;">Códigos sugeridos · tocá para sumarlos a los tuyos</div>
+          <div class="ai-sugg-codes">${workSuggCodes.codificar.map(c=>`<span class="ai-sugg-code" data-add-sugg="${esc(c)}">${esc(c)}</span>`).join("")}</div>` : ""}
+        ${relevant.length ? `<div class="work-label">Ya en tu nube · podrían reaparecer</div>
+          <div class="ai-sugg-codes">${relevant.map(c=>`<span class="ai-sugg-code" data-add-sugg="${esc(c)}">${esc(c)}</span>`).join("")}</div>` : ""}
+        ${workSugg.codificar ? renderMd(workSugg.codificar) : (workSuggCodes.codificar.length?"":`<div class="ai-panel-empty"><span class="aps">◈</span>Cargá un texto y pedí sugerencias.<br>Conceptos que se repiten, preguntas para volver al campo, y lo que queda en el borde.</div>`)}
+      </div>
+    </div>` : "";
+
+  document.getElementById("content").innerHTML=`
+    <div class="work-view">
+      <div class="work-main">
+        ${projectChipHtml()}
+        <div class="work-head">
+          <div class="work-title"><span style="color:#2D6A4F">◈</span> Codificar <em>/ tus códigos analíticos</em></div>
+          <div class="work-sub">El texto y tus códigos son el centro. La IA, si está activa, solo sugiere.</div>
+        </div>
+        <div class="work-label">Texto a codificar</div>
+        ${srcSelectorHtml("codificar")}
+
+        <div class="work-writing-head">
+          <div class="work-writing-title">Tus códigos</div>
+        </div>
+        <div class="usercodes-row" id="cod-mycodes">
+          ${myCodesHtml}
+          <button class="usercode-add" id="cod-add-code">+ código</button>
+        </div>
+
+        <div class="work-writing-head">
+          <div class="work-writing-title">Tu memo de codificación</div>
+        </div>
+        <textarea class="work-writing" id="cod-memo" placeholder="Escribí libremente: qué ves, por qué codificás así, qué dudas te quedan…">${esc(workDraftMemo)}</textarea>
+        <div style="display:flex;gap:.5rem;margin-top:.6rem;flex-wrap:wrap;">
+          <button class="gbtn green" id="cod-save">◆ Guardar en la nube</button>
+        </div>
+      </div>
+      ${aiPanel}
+    </div>`;
+
+  bindSrcSelector("codificar", ()=>renderCodificarView());
+  bindProjectChip();
+
+  // Memo: mantener el borrador vivo entre re-renders.
+  const memoEl=document.getElementById("cod-memo");
+  if(memoEl) memoEl.addEventListener("input",()=>{ workDraftMemo=memoEl.value; });
+  // Captura el memo actual antes de un re-render disparado por un botón.
+  const captureMemo=()=>{ const e=document.getElementById("cod-memo"); if(e) workDraftMemo=e.value; };
+
+  // Códigos del usuario
+  document.getElementById("cod-add-code")?.addEventListener("click",()=>{
+    captureMemo();
+    const row=document.getElementById("cod-mycodes");
+    const inp=document.createElement("input");
+    inp.className="usercode-input"; inp.placeholder="código…";
+    row.insertBefore(inp, document.getElementById("cod-add-code"));
+    inp.focus();
+    const commit=()=>{
+      const v=inp.value.trim().toLowerCase();
+      if(v && !workDraftCodes.includes(v)) workDraftCodes.push(v);
+      renderCodificarView();
+    };
+    inp.addEventListener("keydown",e=>{if(e.key==="Enter")commit();if(e.key==="Escape")renderCodificarView();});
+    inp.addEventListener("blur",commit);
+  });
+  document.querySelectorAll("[data-rm-draft]").forEach(x=>{
+    x.addEventListener("click",()=>{
+      captureMemo();
+      workDraftCodes=workDraftCodes.filter(c=>c!==x.dataset.rmDraft);
+      renderCodificarView();
+    });
+  });
+  // Sugerencias IA → sumar a los míos
+  document.querySelectorAll("[data-add-sugg]").forEach(s=>{
+    s.addEventListener("click",()=>{
+      captureMemo();
+      const c=s.dataset.addSugg.toLowerCase();
+      if(!workDraftCodes.includes(c)) workDraftCodes.push(c);
+      showToast(`"${c}" sumado a tus códigos`);
+      renderCodificarView();
+    });
+  });
+  // Pedir sugerencias
+  document.getElementById("cod-ai-run")?.addEventListener("click",()=>{captureMemo();runCodificarAI();});
+  // Guardar
+  document.getElementById("cod-save")?.addEventListener("click",()=>{captureMemo();saveCodificar();});
+}
+
+async function runCodificarAI(){
+  const text = workInputText("codificar").trim();
+  if(!text){ showToast("Cargá un texto primero"); return; }
+  if(!aiEnabled()){ showToast("La IA está desactivada"); return; }
+  loading=true; renderCodificarView();
+  const sys = `Sos un acompañante metodológico en codificación etnográfica. No reemplazás el análisis de quien investiga: lo abrís.\n\n**CONCEPTOS O DIMENSIONES QUE SE REPITEN**\n3-5 que emergen del fragmento.\n\n**PREGUNTAS DISPARADORAS**\n3-4 preguntas vinculadas al contenido, para volver al campo.\n\n**LO QUE QUEDA EN EL BORDE**\nQué se dice, qué se calla, qué escapa al análisis.\n\nTono curioso, nunca autoritativo.\n\nAl final, en una línea aparte, escribí exactamente:\n[CODES]: codigo1 | codigo2 | codigo3\n(3-6 sugerencias de códigos en formato etiqueta breve, separados por |)`;
+  let acc="";
+  try{
+    await streamGemini(sys, text, chunk=>{
+      acc+=chunk;
+      const body=document.getElementById("cod-ai-body");
+      if(body) body.innerHTML=renderMd(acc.replace(/\n?\[CODES\]:.*$/,""))+'<span class="cursor-blink"></span>';
+    },{maxTokens:2500,temperature:0.85});
+    const cm=acc.match(/\[CODES\]:\s*(.+)/);
+    if(cm){
+      workSuggCodes.codificar=cm[1].split("|").map(c=>c.trim().toLowerCase()).filter(Boolean);
+      acc=acc.replace(/\n?\[CODES\]:.*$/,"").trim();
+    }
+    workSugg.codificar=acc;
+  }catch(e){
+    const d=e._diag||{title:"Error",detail:String(e)};
+    showToast(d.title.replace(/⚠ /,""));
+  }
+  loading=false; renderCodificarView();
+}
+
+function saveCodificar(){
+  const memo=workDraftMemo.trim();
+  if(workDraftCodes.length===0 && !memo){ showToast("Agregá al menos un código o una nota"); return; }
+  const srcName=workSourceName("codificar");
+  const date=new Date().toLocaleDateString("es-AR",{day:"2-digit",month:"2-digit",year:"2-digit"});
+  if(workDraftCodes.length===0){
+    // Guardar solo el memo como un "código" sin etiqueta no tiene sentido; guardamos una nota suelta.
+    savedCodes.push({id:"code_"+Date.now()+"_"+Math.random().toString(36).slice(2),
+      code:"(memo)", note:memo, source:workMode.codificar.src, sourceName:srcName, date});
+  } else {
+    workDraftCodes.forEach(code=>{
+      savedCodes.push({id:"code_"+Date.now()+"_"+Math.random().toString(36).slice(2),
+        code, note:memo, source:workMode.codificar.src, sourceName:srcName, date});
+      cats[code]=(cats[code]||0)+1;  // sigue alimentando la nube de palabras
+    });
+  }
+  persist();
+  const n=workDraftCodes.length;
+  showToast(n>0 ? `${n} código${n!==1?"s":""} guardado${n!==1?"s":""} en la nube ✓` : "Memo guardado en la nube ✓");
+  workDraftCodes=[]; workDraftMemo=""; workSugg.codificar=""; workSuggCodes.codificar=[];
+  renderCodificarView(); renderSidebar();
+}
+
+// ── ANALIZAR ──
+function renderAnalizarView(){
+  const aiAvail = aiEnabled();
+  const inputText = workInputText("analizar");
+
+  const aiPanel = aiAvail ? `
+    <div class="ai-panel ai-only">
+      <div class="ai-panel-head">
+        <span class="ai-panel-sym">◉</span>
+        <span class="ai-panel-title">Acompañamiento de la IA</span>
+        <span class="ai-panel-tag">secundario</span>
+      </div>
+      <button class="ai-panel-run" id="ana-ai-run" ${inputText.trim()?"":"disabled"}>
+        ${loading?'<span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span> Pensando…':'◉ Pedir aperturas'}
+      </button>
+      <div class="ai-panel-body" id="ana-ai-body">
+        ${workSugg.analizar ? renderMd(workSugg.analizar) : `<div class="ai-panel-empty"><span class="aps">◉</span>Observaciones sobre dimensiones y tensiones, preguntas para profundizar, palabras que resuenan y conexiones con tus análisis previos.</div>`}
+      </div>
+    </div>` : "";
+
+  document.getElementById("content").innerHTML=`
+    <div class="work-view">
+      <div class="work-main">
+        ${projectChipHtml()}
+        <div class="work-head">
+          <div class="work-title"><span style="color:#1E3A2F">◉</span> Analizar <em>/ tu escritura analítica</em></div>
+          <div class="work-sub">Tu análisis es el protagonista. La IA acompaña desde el costado.</div>
+        </div>
+        <div class="work-label">Texto a analizar</div>
+        ${srcSelectorHtml("analizar")}
+
+        <div class="work-writing-head">
+          <div class="work-writing-title">Tu análisis</div>
+        </div>
+        <input class="proj-finput" id="ana-title" placeholder="Título de este análisis (opcional)" style="margin-bottom:.5rem;" value="${esc(workDraftAnaTitle)}"/>
+        <textarea class="work-writing" id="ana-body" placeholder="Escribí tu análisis. Dejá que la IA quede al margen: este espacio es tuyo." style="min-height:300px;">${esc(workDraftAnaBody)}</textarea>
+        <div style="display:flex;gap:.5rem;margin-top:.6rem;flex-wrap:wrap;">
+          <button class="gbtn green" id="ana-save">◆ Guardar en la nube</button>
+        </div>
+      </div>
+      ${aiPanel}
+    </div>`;
+
+  bindSrcSelector("analizar", ()=>renderAnalizarView());
+  bindProjectChip();
+  const anaTitleEl=document.getElementById("ana-title");
+  const anaBodyEl=document.getElementById("ana-body");
+  if(anaTitleEl) anaTitleEl.addEventListener("input",()=>{workDraftAnaTitle=anaTitleEl.value;});
+  if(anaBodyEl) anaBodyEl.addEventListener("input",()=>{workDraftAnaBody=anaBodyEl.value;});
+  const captureAna=()=>{
+    const t=document.getElementById("ana-title"); if(t) workDraftAnaTitle=t.value;
+    const b=document.getElementById("ana-body"); if(b) workDraftAnaBody=b.value;
+  };
+  document.getElementById("ana-ai-run")?.addEventListener("click",()=>{captureAna();runAnalizarAI();});
+  document.getElementById("ana-save")?.addEventListener("click",()=>{captureAna();saveAnalizar();});
+}
+
+async function runAnalizarAI(){
+  const text = workInputText("analizar").trim();
+  if(!text){ showToast("Cargá un texto primero"); return; }
+  if(!aiEnabled()){ showToast("La IA está desactivada"); return; }
+  // Contexto de análisis previos para sugerir conexiones.
+  const prev = savedAnalyses.slice(-4).map(a=>`- ${a.title||"(sin título)"}: ${a.body.slice(0,160)}`).join("\n");
+  const prevCtx = prev ? `\n\nAnálisis previos del usuario (para sugerir conexiones, no para repetir):\n${prev}` : "";
+  loading=true; renderAnalizarView();
+  const sys = `Sos un interlocutor académico en una investigación etnográfica. Tus aportes son secundarios: el análisis lo escribe quien investiga.\n\n**DIMENSIONES, TENSIONES O PATRONES**\nObservaciones sobre lo que el texto abre. Nombrá tensiones sin resolverlas.\n\n**PREGUNTAS PARA PROFUNDIZAR**\n3-5 interrogantes.\n\n**PALABRAS QUE RESUENAN**\nTérminos del texto que merecen atención, con una pregunta para cada uno.\n\n**LO QUE QUEDA EN EL BORDE**\nLo poco explorado o lo que escapa.\n\n**POSIBLES CONEXIONES**\nCon bibliografía o con análisis previos del usuario, como apertura.`;
+  let acc="";
+  try{
+    await streamGemini(sys, text+prevCtx, chunk=>{
+      acc+=chunk;
+      const body=document.getElementById("ana-ai-body");
+      if(body) body.innerHTML=renderMd(acc)+'<span class="cursor-blink"></span>';
+    },{maxTokens:2800,temperature:0.85});
+    workSugg.analizar=acc;
+  }catch(e){
+    const d=e._diag||{title:"Error",detail:String(e)};
+    showToast(d.title.replace(/⚠ /,""));
+  }
+  loading=false; renderAnalizarView();
+}
+
+function saveAnalizar(){
+  const title=workDraftAnaTitle.trim();
+  const body=workDraftAnaBody.trim();
+  if(!body){ showToast("Escribí tu análisis primero"); return; }
+  const srcName=workSourceName("analizar");
+  const date=new Date().toLocaleDateString("es-AR",{day:"2-digit",month:"2-digit",year:"2-digit"});
+  const low=body.toLowerCase();
+  const linkedCodes=[...new Set(savedCodes.map(c=>c.code))].filter(c=>c!=="(memo)"&&low.includes(c.toLowerCase()));
+  savedAnalyses.push({id:"ana_"+Date.now()+"_"+Math.random().toString(36).slice(2),
+    title:title||srcName, body, codes:linkedCodes,
+    source:workMode.analizar.src, sourceName:srcName, date});
+  persist();
+  showToast("Análisis guardado en la nube ✓");
+  workDraftAnaTitle=""; workDraftAnaBody=""; workSugg.analizar="";
+  renderAnalizarView(); renderSidebar();
+}
+
+// ───────────────────────────────────────────────────────────────────────────
+// NUBE v8 — vínculos, códigos y análisis guardados
+// ───────────────────────────────────────────────────────────────────────────
+function renderNubeV8(){
+  const tabs=[
+    {id:"vinculos",label:"Vínculos"},
+    {id:"codigos",label:`Códigos (${savedCodes.length})`},
+    {id:"analisis",label:`Análisis (${savedAnalyses.length})`},
+    {id:"categorias",label:"Nube de palabras"},
+  ];
+  let inner="";
+  if(nubeTab==="vinculos") inner=nubeVinculosHtml();
+  else if(nubeTab==="codigos") inner=nubeCodigosHtml();
+  else if(nubeTab==="analisis") inner=nubeAnalisisHtml();
+  else inner=nubeCategoriasHtml();
+
+  document.getElementById("content").innerHTML=`
+    <div class="alt-view">
+      <div class="alt-title">◆ Nube del proyecto</div>
+      <div class="alt-sub">Todo lo que guardaste, y cómo se conecta entre sí</div>
+      ${backupBannerHtml()}
+      <div class="nube-tabs">
+        ${tabs.map(t=>`<div class="nube-tab ${nubeTab===t.id?"active":""}" data-ntab="${t.id}">${t.label}</div>`).join("")}
+      </div>
+      <div id="nube-inner">${inner}</div>
+    </div>`;
+
+  document.querySelectorAll("[data-ntab]").forEach(t=>{
+    t.addEventListener("click",()=>{nubeTab=t.dataset.ntab;renderNubeV8();});
+  });
+  bindNubeInner();
+  bindBackupBanner();
+}
+
+// Agrupa códigos y análisis por código compartido → muestra qué comparte qué.
+function nubeVinculosHtml(){
+  const byCode={};
+  savedCodes.forEach(c=>{
+    (byCode[c.code]=byCode[c.code]||{codes:[],analyses:[]}).codes.push(c);
+  });
+  savedAnalyses.forEach(a=>{
+    (a.codes||[]).forEach(code=>{
+      (byCode[code]=byCode[code]||{codes:[],analyses:[]}).analyses.push(a);
+    });
+  });
+  const entries=Object.entries(byCode).sort((a,b)=>
+    (b[1].codes.length+b[1].analyses.length)-(a[1].codes.length+a[1].analyses.length));
+  if(entries.length===0){
+    return `<div style="text-align:center;padding:2.5rem 1rem;color:var(--empty);">
+      <div style="font-size:2rem;margin-bottom:.5rem;opacity:.3">◆</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--text2);">
+        Los vínculos aparecen cuando un mismo código<br>conecta varios materiales o análisis.
+      </div></div>`;
+  }
+  return entries.map(([code,g])=>{
+    const total=g.codes.length+g.analyses.length;
+    const items=[
+      ...g.codes.map(c=>`<div class="link-item"><span class="link-item-src">código · ${esc(c.sourceName)}</span> ${c.note?esc(c.note.slice(0,80)):"<em style='opacity:.6'>sin nota</em>"}</div>`),
+      ...g.analyses.map(a=>`<div class="link-item"><span class="link-item-src">análisis</span> ${esc(a.title||"(sin título)")}</div>`)
+    ].join("");
+    return `<div class="link-group">
+      <div class="link-group-head">
+        <span class="link-group-code">${esc(code)}</span>
+        <span class="link-group-count">${total} material${total!==1?"es":""}</span>
+      </div>
+      <div class="link-group-body">${items}</div>
+    </div>`;
+  }).join("");
+}
+
+function nubeCodigosHtml(){
+  if(savedCodes.length===0) return emptyNube("Aún no guardaste códigos desde Codificar.");
+  return savedCodes.slice().reverse().map(c=>`
+    <div class="saved-card">
+      <div class="saved-card-head">
+        <span class="saved-card-title">${esc(c.code)}</span>
+        <span class="saved-card-date">${c.date}</span>
+      </div>
+      <div class="link-item-src" style="margin-bottom:.2rem;">desde: ${esc(c.sourceName)}</div>
+      ${c.note?`<div class="saved-card-body">${esc(c.note)}</div>`:""}
+      <div style="display:flex;justify-content:flex-end;margin-top:.4rem;">
+        <button class="dtb danger" data-del-code="${c.id}">✕ Eliminar</button>
+      </div>
+    </div>`).join("");
+}
+
+function nubeAnalisisHtml(){
+  if(savedAnalyses.length===0) return emptyNube("Aún no guardaste análisis desde Analizar.");
+  return savedAnalyses.slice().reverse().map(a=>`
+    <div class="saved-card">
+      <div class="saved-card-head">
+        <span class="saved-card-title">${esc(a.title||"(sin título)")}</span>
+        <span class="saved-card-date">${a.date}</span>
+      </div>
+      <div class="link-item-src" style="margin-bottom:.3rem;">desde: ${esc(a.sourceName)}</div>
+      <div class="saved-card-body">${esc(a.body)}</div>
+      ${(a.codes&&a.codes.length)?`<div class="saved-card-codes">${a.codes.map(c=>`<span class="usercode-chip" style="cursor:default;">${esc(c)}</span>`).join("")}</div>`:""}
+      <div style="display:flex;gap:.4rem;justify-content:flex-end;margin-top:.5rem;">
+        <button class="dtb outline" data-reopen-ana="${a.id}">→ Reabrir en Analizar</button>
+        <button class="dtb danger" data-del-ana="${a.id}">✕ Eliminar</button>
+      </div>
+    </div>`).join("");
+}
+
+function nubeCategoriasHtml(){
+  // Reutiliza la nube de palabras original (cats).
+  const entries=Object.entries(cats).sort((a,b)=>b[1]-a[1]);
+  if(entries.length===0) return emptyNube("Las palabras aparecen cuando codificás.");
+  const colors=["#1E3A2F","#2D6A4F","#B85C38","#7B5EA7","#2A5A8C","#6B4423","#3A6A3A","#8C4A2A"];
+  const darkColors=["#3D8A6A","#D4784A","#9B7EC7","#4A7AAC","#9A6433","#5A9A5A","#AC6A3A","#4A8A8A"];
+  const palette=darkMode?darkColors:colors;
+  const max=entries[0][1];
+  const cloud=entries.map(([cat,count],i)=>{
+    const scale=0.75+(count/max)*0.85; const color=palette[i%palette.length];
+    return `<span class="cat-chip" style="font-family:'Cormorant Garamond',serif;font-size:${scale*1.05}rem;font-weight:${count>2?600:400};color:${color};background:${color}18;border:1px solid ${color}35;">
+      ${esc(cat)}<span class="cat-count">×${count}</span></span>`;
+  }).join("");
+  return `<div style="display:flex;flex-wrap:wrap;gap:.5rem;line-height:1.6;">${cloud}</div>
+    <div style="margin-top:1.2rem;display:flex;justify-content:flex-end;">
+      <button class="gbtn outline" style="font-size:.56rem;" id="clear-cats-btn">Limpiar nube de palabras</button>
+    </div>`;
+}
+
+function emptyNube(msg){
+  return `<div style="text-align:center;padding:2.5rem 1rem;color:var(--empty);">
+    <div style="font-size:2rem;margin-bottom:.5rem;opacity:.3">◆</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--text2);">${msg}</div>
+  </div>`;
+}
+
+function bindNubeInner(){
+  document.querySelectorAll("[data-del-code]").forEach(b=>{
+    b.addEventListener("click",()=>{
+      const c=savedCodes.find(x=>x.id===b.dataset.delCode);
+      savedCodes=savedCodes.filter(x=>x.id!==b.dataset.delCode);
+      if(c && cats[c.code]){ cats[c.code]--; if(cats[c.code]<=0) delete cats[c.code]; }
+      persist(); showToast("Código eliminado"); renderNubeV8(); renderSidebar();
+    });
+  });
+  document.querySelectorAll("[data-del-ana]").forEach(b=>{
+    b.addEventListener("click",()=>{
+      savedAnalyses=savedAnalyses.filter(x=>x.id!==b.dataset.delAna);
+      persist(); showToast("Análisis eliminado"); renderNubeV8(); renderSidebar();
+    });
+  });
+  document.querySelectorAll("[data-reopen-ana]").forEach(b=>{
+    b.addEventListener("click",()=>{
+      const a=savedAnalyses.find(x=>x.id===b.dataset.reopenAna); if(!a) return;
+      mode="analizar";
+      workMode.analizar={src:"fragmento",matId:"",text:""};
+      workDraftAnaTitle=a.title||""; workDraftAnaBody=a.body;
+      workSugg.analizar=""; render();
+    });
+  });
+  document.getElementById("clear-cats-btn")?.addEventListener("click",()=>{
+    cats={};persist();showToast("Nube de palabras reiniciada");renderNubeV8();renderSidebar();
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// MAIN RENDER
+// ═══════════════════════════════════════════════════════════════════════════
+function render(){
+  // Reflejar estado de IA en el contenedor (oculta paneles IA vía CSS).
+  const appEl=document.getElementById("app");
+  if(appEl) appEl.classList.toggle("ai-off", !aiEnabled());
+  renderSidebar();
+  if(mode==="config") renderConfigView();
+  else if(mode==="citar") renderCitarView();
+  else if(mode==="codificar") renderCodificarView();
+  else if(mode==="analizar") renderAnalizarView();
+  else if(mode==="recomendar") renderToolView();
+  else if(MATERIAL_KEYS.includes(mode)) renderMaterialsView(mode);
+  else if(mode==="documentos") renderMaterialsView("documentos");
+  else if(mode==="nube") renderNubeV8();
+  else renderCodificarView();
+  updateStatus();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// INTRO + INIT
+// ═══════════════════════════════════════════════════════════════════════════
+(function init(){
+  // Load saved data
+  const c=stLoad(SK.cats); if(c) cats=c;
+  const d=stLoad(SK.docs); if(d) docs=d;
+  const n=stLoad(SK.notes); if(n) notes=n;
+  const h=stLoad(SK.hist); if(h) history=h;
+
+  // v8: cargar estado nuevo
+  const pr=stLoad(SK.project); if(pr) project={...project,...pr};
+  const ai=stLoad(SK.aiOn); aiOn = (ai===null||ai===undefined) ? true : ai;
+  const mt=stLoad(SK.materials); if(mt) materials=mt;
+  const sc=stLoad(SK.savedCodes); if(sc) savedCodes=sc;
+  const sa=stLoad(SK.savedAnalyses); if(sa) savedAnalyses=sa;
+
+  // Migración suave: documentos antiguos (docs) → materiales tipo "documentos"
+  if(materials.length===0 && docs.length>0){
+    materials = docs.map(dc=>({
+      id:dc.id, type:"documentos", name:dc.name, text:dc.text,
+      date:new Date().toLocaleDateString("es-AR",{day:"2-digit",month:"2-digit",year:"2-digit"})
+    }));
+    persist();
+  }
+
+  // Load theme preference
+  const savedTheme=stLoad(SK.theme);
+  const prefersDark=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;
+  applyTheme(savedTheme!==null ? savedTheme : prefersDark);
+
+  // Theme button
+  document.getElementById("theme-btn").addEventListener("click",()=>{
+    applyTheme(!darkMode);
+    if(mode==="nube") renderNubeV8();
+  });
+
+  // v8: toggle de IA
+  document.getElementById("ai-toggle").addEventListener("click",()=>{
+    if(!hasKey() && !aiOn){
+      // Quiere activar pero no hay clave: mandarlo a configurar.
+      showToast("Primero configurá tu clave de Gemini");
+      mode="config"; render(); return;
+    }
+    setAiOn(!aiOn);
+    showToast(aiEnabled() ? "IA activada" : "IA desactivada");
+    render();
+  });
+
+  // v8: bindings del modal de proyecto
+  bindProjectModal();
+
+  // Check if first visit (no stored data)
+  const hasData = stLoad(SK.cats)||stLoad(SK.docs)||stLoad(SK.notes)||stLoad(SK.hist);
+  const introScreen = document.getElementById("intro-screen");
+  const appEl = document.getElementById("app");
+
+  function enterApp(){
+    introScreen.classList.add("fade-out");
+    appEl.style.opacity="1";
+    loaded=true;
+    updateStatus();
+    render();
+    setTimeout(()=>{introScreen.style.display="none";},500);
+  }
+
+  document.getElementById("intro-enter-btn").addEventListener("click",enterApp);
+
+  // If returning user with data, show intro briefly then allow skip
+  // (always show intro on load for first-time orientation)
+  // Pre-render app in background
+  loaded=false;
+  updateStatus();
+  render();
+})();
+
+window.addEventListener("resize",()=>renderSidebar());
+</script>
+</body>
+</html>
